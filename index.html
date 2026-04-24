@@ -609,6 +609,7 @@ img { display: block; width: 100%; height: 100%; object-fit: cover; }
   .hero-bg { flex-direction: column; }
   .hero-half { flex: 1 !important; transition: none; }
   .hero-zone-btn { bottom: 24px; left: 20px; }
+  .hero-bg::after { display: none; }
   .hero-center { margin-bottom: 0; margin-top: -60px; }
   .hero-title { max-width: 260px; font-size: 24px; }
   .zone-label { font-size: 20px; }
@@ -618,6 +619,8 @@ img { display: block; width: 100%; height: 100%; object-fit: cover; }
   .architecture .container { padding: 0 24px; }
   .step { padding: 36px 28px; }
   .offres { padding: var(--spacing-xl) 0; }
+  .offres .section-title { font-size: 32px; }
+  .offre-bloc-header h3 { font-size: 24px; }
   .cards-cta { font-size: 10px !important; letter-spacing: 0.5px !important; text-decoration: none !important; }
   .fondateur-photo {
     -webkit-mask-image: linear-gradient(to bottom, black 30%, rgba(0,0,0,0.6) 65%, transparent 100%), linear-gradient(to right, black 75%, rgba(0,0,0,0.2) 92%, transparent 100%) !important;
@@ -648,6 +651,12 @@ img { display: block; width: 100%; height: 100%; object-fit: cover; }
   .intro-headline { font-size: 32px; }
   .fondateur-title { font-size: 30px; }
   .contact-title { font-size: 28px; }
+}
+
+/* B2C mode: slightly warmer background to differentiate from B2B */
+body.mode-b2c {
+  --cream: #F0E9DF;
+  --cream-dark: #E8DDD0;
 }
 </style>
 </head>
@@ -805,29 +814,26 @@ img { display: block; width: 100%; height: 100%; object-fit: cover; }
     <div class="contact-right">
       <form class="contact-form" action="https://formspree.io/f/xgorrgpn" method="POST">
 <input type="hidden" name="_next" value="https://www.suitesonore.com/merci.html">
-  <div class="form-field">
-    <input type="text" id="f-nom" name="nom" placeholder=" " required>
-    <label for="f-nom">Nom</label>
-    <div class="field-line"></div>
-  </div>
-  
-  <div class="form-field">
-    <input type="email" id="f-email" name="email" placeholder=" " required>
-    <label for="f-email">Email</label>
-    <div class="field-line"></div>
-  </div>
-  
-  <div class="form-field">
-    <textarea id="f-msg" name="message" placeholder=" " rows="4" required></textarea>
-    <label for="f-msg">Parlez-moi de votre projet…</label>
-    <div class="field-line"></div>
-  </div>
-  
-  <button type="submit" class="form-btn">
-    <span class="btn-text">Envoyer</span>
-    <span class="btn-arrow">→</span>
-  </button>
-</form>
+        <div class="form-field">
+          <input type="text" id="f-nom" name="nom" placeholder=" " required>
+          <label for="f-nom">Nom</label>
+          <div class="field-line"></div>
+        </div>
+        <div class="form-field">
+          <input type="email" id="f-email" name="email" placeholder=" " required>
+          <label for="f-email">Email</label>
+          <div class="field-line"></div>
+        </div>
+        <div class="form-field">
+          <textarea id="f-msg" name="message" placeholder=" " rows="4" required></textarea>
+          <label for="f-msg">Parlez-moi de votre projet…</label>
+          <div class="field-line"></div>
+        </div>
+        <button type="submit" class="form-btn">
+          <span class="btn-text">Envoyer</span>
+          <span class="btn-arrow">→</span>
+        </button>
+      </form>
     </div>
   </div>
 </section>
@@ -966,8 +972,8 @@ const content = {
         <div class="offre-highlight">
           <div class="offre-highlight-main">Économisez près de 15 % avec l'engagement annuel.</div>
           <div class="offre-highlight-detail">
-            Engagement de 12 mois pour l'offre annuelle<br>
-            Engagement initial de 3 mois pour l'offre mensuelle
+            Engagement de 12 mois pour l'offre annuelle.<br>
+            Engagement initial de 3 mois pour l'offre mensuelle.
           </div>
         </div>
       </div>
@@ -1091,10 +1097,15 @@ function setMode(mode) {
   });
   document.getElementById('hero-left').classList.toggle('hero-active', mode === 'b2b');
   document.getElementById('hero-right').classList.toggle('hero-active', mode === 'b2c');
+  document.body.classList.toggle('mode-b2c', mode === 'b2c');
 
   // Update quote
   document.getElementById('fondateur-quote-text').textContent = q.text;
   document.getElementById('fondateur-quote-attr').textContent = q.attr;
+
+  // Update form label dynamically
+  const nomLabel = document.querySelector('label[for="f-nom"]');
+  if (nomLabel) nomLabel.textContent = mode === 'b2b' ? 'Établissement' : 'Nom';
 
   const ids = ['intro-content', 'timeline-content', 'offres-content', 'pull-quote'];
   ids.forEach(id => {
@@ -1138,9 +1149,11 @@ function setMode(mode) {
     });
   }, 200);
 
-  setTimeout(() => {
-    document.getElementById('intro').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 400);
+  if (!isInitialLoad) {
+    setTimeout(() => {
+      document.getElementById('intro').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 400);
+  }
 }
 
 document.getElementById('b2b-btn').addEventListener('click', () => setMode('b2b'));
@@ -1164,7 +1177,9 @@ const revealObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.reveal-section').forEach(el => revealObserver.observe(el));
 
+let isInitialLoad = true;
 setMode('b2b');
+setTimeout(() => { isInitialLoad = false; }, 600);
 
 
 // ─── HAMBURGER ───────────────────────────────────────────────────────────────
@@ -1187,11 +1202,7 @@ hambLinks.forEach(link => {
   link.addEventListener('click', closeMenu);
 });
 
-document.getElementById('contact-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const btn = e.target.querySelector('.form-btn');
-  btn.innerHTML = '<span class="btn-text">Envoyé ✓</span>';
-});
+// Form handled by Formspree
 </script>
 </body>
 </html>
