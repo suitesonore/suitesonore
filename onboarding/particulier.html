@@ -29,7 +29,7 @@ body { background: var(--cream); color: var(--black); font-family: 'Montserrat',
   right: 0; 
   z-index: 1000; 
   height: 2px; 
-  background: transparent; /* Changé de var(--border) à transparent pour cacher le filet vide sur la page 1 */
+  background: transparent;
 }
 #progress-bar { 
   height: 100%; 
@@ -41,20 +41,20 @@ body { background: var(--cream); color: var(--black); font-family: 'Montserrat',
 /* HEADER */
 #site-header { 
   position: fixed; 
-  top: 0; /* Changé de 2px à 0 pour coller le bandeau en haut */
+  top: 0;
   left: 0; 
   right: 0; 
   z-index: 900; 
   background: var(--cream); 
   border-bottom: 1px solid var(--border); 
   padding: 0 2.5rem; 
-  height: 64px; /* Augmenté de 2px pour compenser le changement de top et garder le logo centré */
+  height: 64px;
   display: flex; 
   align-items: center; 
   justify-content: space-between; 
 }
 .logo-link { display: flex; align-items: center; cursor: pointer; border: none; background: none; padding: 0; }
-.logo-img { height: 28px; width: auto; display: block; margin-top: 2px; } /* Petit ajustement pour que le logo ne colle pas la barre */
+.logo-img { height: 28px; width: auto; display: block; margin-top: 2px; }
 .logo-fallback { font-family: 'Playfair Display', serif; font-size: 1rem; letter-spacing: .2em; text-transform: uppercase; color: var(--forest); }
 #step-label { font-size: .65rem; letter-spacing: .22em; text-transform: uppercase; color: var(--sand); font-weight: 400; }
 
@@ -97,13 +97,26 @@ input[type="text"], input[type="date"], input[type="number"], textarea { width: 
 input:focus, textarea:focus { border-bottom-color: var(--forest); }
 textarea { resize: none; min-height: 90px; line-height: 1.8; }
 
+/* MODIFICATION 2 : placeholder tronqué avec ellipsis sur mobile */
+@media (max-width: 768px) {
+  input[type="text"]::placeholder,
+  input[type="date"]::placeholder,
+  input[type="number"]::placeholder,
+  input[type="email"]::placeholder,
+  input[type="tel"]::placeholder {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
 /* CHIPS */
 .chip-group, .radio-group { display: flex; flex-wrap: wrap; gap: .55rem; }
 .chip, .radio-chip { padding: .45rem 1.05rem; border: 1px solid var(--border); background: transparent; font-family: 'Montserrat', sans-serif; font-size: .75rem; font-weight: 400; color: var(--black); cursor: pointer; transition: all .2s; letter-spacing: .02em; }
 .chip:hover, .radio-chip:hover { border-color: var(--forest); color: var(--forest); }
 .chip.selected, .radio-chip.selected { background: var(--forest); border-color: var(--forest); color: var(--cream); }
 
-/* MOMENT CHIP — légèrement plus grand, accent sable au survol */
+/* MOMENT CHIP */
 .moment-chip { padding: .55rem 1.2rem; border: 1px solid var(--border); background: transparent; font-family: 'Montserrat', sans-serif; font-size: .78rem; font-weight: 400; color: var(--black); cursor: pointer; transition: all .2s; letter-spacing: .03em; }
 .moment-chip:hover { border-color: var(--sand); color: var(--sand); }
 .moment-chip.selected { background: var(--forest); border-color: var(--forest); color: var(--cream); }
@@ -168,7 +181,6 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.4); }
 .success-icon { width: 52px; height: 52px; border: 1px solid var(--forest); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin: 0 auto 2.25rem; color: var(--forest); }
 .success-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 400; color: var(--forest); margin-bottom: 1.25rem; line-height: 1.3; }
 .success-sub { font-size: .88rem; color: var(--muted); max-width: 420px; line-height: 1.95; font-weight: 300; margin: 0 auto; }
-/* Style des champs Email et Tel pour correspondre au design */
 input[type="text"], input[type="email"], input[type="tel"] {
   width: 100%;
   padding: .8rem 0;
@@ -213,7 +225,6 @@ input:focus {
 <!-- ══════════════════ ÉTAPE 1 ══════════════════ -->
 <div class="screen" id="screen-b2c-1">
 
-  <!-- HERO BANNER — remplacez hero-particulier.jpg par votre image -->
   <div class="hero-banner">
     <img src="hero-particulier.jpg" alt="" class="hero-img" onerror="this.style.opacity='0'">
     <div class="hero-overlay">
@@ -238,14 +249,14 @@ input:focus {
     </div>
 
     <div class="field-group">
-  <label>VOTRE EMAIL</label>
-  <input type="email" name="email" id="customer-email" placeholder="ex. contact@suitesonore.com" required>
-</div>
+      <label>VOTRE EMAIL</label>
+      <input type="email" name="email" id="customer-email" placeholder="ex. contact@suitesonore.com" required>
+    </div>
 
-<div class="field-group">
-  <label>VOTRE NUMÉRO DE TÉLÉPHONE</label>
-  <input type="tel" name="telephone" id="customer-tel" placeholder="ex. 06 12 34 56 78">
-</div>
+    <div class="field-group">
+      <label>VOTRE NUMÉRO DE TÉLÉPHONE</label>
+      <input type="tel" name="telephone" id="customer-tel" placeholder="ex. 06 12 34 56 78">
+    </div>
     
     <div class="field-group">
       <label>Type d'événement</label>
@@ -361,7 +372,7 @@ input:focus {
 
   <div class="field-group">
     <label>Quelle émotion principale souhaitez-vous provoquer chez vos invités ?</label>
-    <input type="text" id="b2c-emotion" placeholder="ex. Légèreté et insouciance, Élégance feutrée, Nostalgie joyeuse, Énergie pure…">
+    <input type="text" id="b2c-emotion" placeholder="ex. Légèreté et insouciance, Élégance feutrée, Nostalgie joyeuse…">
   </div>
 
   <div class="field-group">
@@ -390,7 +401,7 @@ input:focus {
 
   <div class="field-group">
     <label>Y a-t-il un moment de bascule musicale prévu ? <span class="opt">optionnel</span></label>
-    <input type="text" id="b2c-bascule" placeholder="ex. À l'arrivée des mariés, au début du dîner, lors de la cérémonie, à l'ouverture du bal…">
+    <input type="text" id="b2c-bascule" placeholder="ex. À l'arrivée des mariés, au début du dîner, à l'ouverture du bal…">
   </div>
 
   <button class="notes-toggle" onclick="toggleNotes(this)"><span class="ti">+</span> Notes et précisions</button>
@@ -412,7 +423,6 @@ input:focus {
     <p>Sélectionnez les moments compris dans votre formule. Les questions correspondantes apparaîtront automatiquement — uniquement pour les séquences qui vous concernent.</p>
   </div>
 
-  <!-- SÉLECTION DES MOMENTS -->
   <div class="field-group">
     <label>Quels moments souhaitez-vous confier à Suite Sonore ? <span class="opt">plusieurs choix possibles</span></label>
     <div class="chip-group" style="gap:.65rem;">
@@ -433,7 +443,7 @@ input:focus {
       <p class="moment-block-title">Welcome Dinner</p>
       <div class="field-group">
         <label>Ambiance souhaitée pour la soirée de la veille</label>
-        <input type="text" id="wd-ambiance" placeholder="ex. Décontractée et chaleureuse, Élégante et intimiste, Jazz en fond sonore…">
+        <input type="text" id="wd-ambiance" placeholder="ex. Décontractée et chaleureuse, Élégante et intimiste…">
       </div>
       <div class="field-group">
         <label>Niveau d'énergie</label>
@@ -503,19 +513,42 @@ input:focus {
       <p class="moment-block-title">Dîner</p>
       <div class="field-group">
         <label>Ambiance souhaitée pendant le dîner</label>
-        <input type="text" id="din-ambiance" placeholder="ex. Élégante et feutrée, Détendue et conviviale, Jazz contemporain en fond…">
+        <input type="text" id="din-ambiance" placeholder="ex. Élégante et feutrée, Détendue et conviviale…">
       </div>
       <div class="field-group">
         <label>Comment imaginez-vous la transition vers le festif ?</label>
-        <textarea id="din-transition" placeholder="ex. Progressive dès le dessert, bascule franche après le dernier discours, ambiance lounge tout au long du dîner…"></textarea>
+        <textarea id="din-transition" placeholder="ex. Progressive dès le dessert, bascule franche après le dernier discours…"></textarea>
       </div>
     </div>
   </div>
 
   <!-- ── SOIRÉE ── -->
+  <!-- MODIFICATION 3 : ajout de 3 nouvelles questions dans la section Soirée -->
   <div class="conditional" id="moment-soiree">
     <div class="moment-block">
       <p class="moment-block-title">Soirée</p>
+      <div class="field-group">
+        <label>Quelle énergie souhaitez-vous pour la soirée ?</label>
+        <div class="radio-group">
+          <button class="radio-chip" data-val="Électronique et intense : on danse toute la nuit" onclick="selectRadio(this,'soiree-energie')">Électronique et intense</button>
+          <button class="radio-chip" data-val="Festive et décontractée : ambiance chaleureuse"   onclick="selectRadio(this,'soiree-energie')">Festive et décontractée</button>
+          <button class="radio-chip" data-val="À définir ensemble"                               onclick="selectRadio(this,'soiree-energie')">À définir ensemble</button>
+        </div>
+        <input type="hidden" id="soiree-energie">
+      </div>
+      <div class="field-group">
+        <label>Genre musical dominant pour la soirée <span class="opt">optionnel</span></label>
+        <input type="text" id="soiree-genre" placeholder="ex. House, Funk, Disco, R&B, Soul, Pop…">
+      </div>
+      <div class="field-group">
+        <label>Y a-t-il un DJ ou des musiciens prévus pour la soirée ?</label>
+        <div class="radio-group">
+          <button class="radio-chip" data-val="Non : playlist Suite Sonore uniquement" onclick="selectRadio(this,'soiree-dj')">Non : playlist uniquement</button>
+          <button class="radio-chip" data-val="Oui : DJ prévu"                         onclick="selectRadio(this,'soiree-dj')">Oui : DJ prévu</button>
+          <button class="radio-chip" data-val="À définir"                              onclick="selectRadio(this,'soiree-dj')">À définir</button>
+        </div>
+        <input type="hidden" id="soiree-dj">
+      </div>
       <div class="field-group">
         <label>Profil de vos invités en soirée</label>
         <div class="radio-group">
@@ -547,6 +580,7 @@ input:focus {
   </div>
 
   <!-- ── AFTERPARTY ── -->
+  <!-- MODIFICATION 3 : question DJ retirée de l'Afterparty, déplacée dans Soirée -->
   <div class="conditional" id="moment-afterparty">
     <div class="moment-block">
       <p class="moment-block-title">Afterparty</p>
@@ -562,15 +596,6 @@ input:focus {
       <div class="field-group">
         <label>Genre musical dominant pour l'afterparty <span class="opt">optionnel</span></label>
         <input type="text" id="after-genre" placeholder="ex. House, Techno minimale, R&B, Funk, Disco…">
-      </div>
-      <div class="field-group">
-        <label>Y a-t-il un DJ ou des musiciens prévus pour l'afterparty ?</label>
-        <div class="radio-group">
-          <button class="radio-chip" data-val="Non : playlist Suite Sonore uniquement" onclick="selectRadio(this,'after-dj')">Non : playlist uniquement</button>
-          <button class="radio-chip" data-val="Oui : DJ prévu"                         onclick="selectRadio(this,'after-dj')">Oui : DJ prévu</button>
-          <button class="radio-chip" data-val="À définir"                              onclick="selectRadio(this,'after-dj')">À définir</button>
-        </div>
-        <input type="hidden" id="after-dj">
       </div>
     </div>
   </div>
@@ -688,7 +713,6 @@ input:focus {
   <button class="notes-toggle" onclick="toggleNotes(this)"><span class="ti">+</span> Notes et précisions</button>
   <div class="notes-area"><textarea id="b2c-notes-5" placeholder="Tout ce que nous n'avons pas encore abordé et qui pourrait nourrir notre travail…"></textarea></div>
 
-  <!-- display:none masque l'élément HTML uniquement — le fetch() JS fonctionne normalement. -->
   <form id="b2c-form" action="https://formspree.io/f/mwvagdoo" method="POST" style="display:none;">
     <input type="hidden" name="parcours" value="B2C — L'Atelier Sonore">
     <input type="hidden" name="_subject" value="Nouvel onboarding Suite Sonore — Événement">
@@ -720,6 +744,11 @@ const flowWedding = ['b2c-1','b2c-2','b2c-3','b2c-4','b2c-5','success'];
 function getFlow() { return isWedding ? flowWedding : flowBase; }
 
 // ─── NAVIGATION ─────────────────────────────────────────────
+// MODIFICATION 1 : scroll to top forcé sur mobile lors du passage étape 1 → étape 2
+function isMobile() {
+  return window.innerWidth <= 768;
+}
+
 function showScreen(name) {
   const cur = document.getElementById('screen-' + currentScreen);
   const nxt = document.getElementById('screen-' + name);
@@ -733,7 +762,17 @@ function showScreen(name) {
     nxt.classList.add('active');
     requestAnimationFrame(() => requestAnimationFrame(() => {
       nxt.classList.add('visible');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Sur mobile : scroll forcé immédiat + second scroll après rendu pour couvrir tous les cas
+      if (isMobile()) {
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        setTimeout(() => {
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+        }, 50);
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }));
   }, 350);
 }
@@ -862,7 +901,6 @@ function removeTag(rm, val, hiddenId, countId, max, unit) {
 }
 
 // ─── PREFILL VIA URL ────────────────────────────────────────
-// Usage: particulier.html?nom=Sophie%20Leblanc&type=Mariage&date=2025-09-20&invites=120
 function prefillFromURL() {
   const p = new URLSearchParams(window.location.search);
   [['nom','b2c-nom'],['date','b2c-date'],['invites','b2c-invites']].forEach(([param, id]) => {
@@ -885,14 +923,12 @@ function prefillFromURL() {
 // ─── COLLECT ────────────────────────────────────────────────
 function v(id) { const el = document.getElementById(id); return el ? el.value : ''; }
 function r(id) {
-  // Collect range slider value
   const el = document.getElementById(id);
   return el ? el.value + '/100' : '';
 }
 
 // ─── SUBMIT ─────────────────────────────────────────────────
 async function submitB2C() {
-  // Collect selected moments
   const selectedMoments = Array.from(document.querySelectorAll('.moment-chip.selected')).map(b => b.dataset.val).join(', ');
 
   const data = {
@@ -908,37 +944,30 @@ async function submitB2C() {
     'Curseur Vos goûts/Invités': r('b2c-gouts'),
     'Curseur Connus/Découvertes': r('b2c-decouv'),
     'Bascule': v('b2c-bascule'), 'Notes étape 3': v('b2c-notes-3'),
-    // Moments sélectionnés
     'Moments sélectionnés': selectedMoments,
-    // Welcome Dinner
     'Welcome Dinner — Ambiance': v('wd-ambiance'),
     'Welcome Dinner — Énergie': v('wd-energie'),
     'Welcome Dinner — Genres/artistes': v('wd-genres'),
-    // Cérémonie
     'Cérémonie — Émotion': v('cere-emotion'),
     'Cérémonie — Durée': v('cere-duree'),
     'Cérémonie — Live': v('cere-live'),
     'Cérémonie — Live détail': v('cere-live-detail'),
-    // Cocktail
     'Cocktail — Énergie': v('cock-energie'),
     'Cocktail — Genre': v('cock-genre'),
-    // Dîner
     'Dîner — Ambiance': v('din-ambiance'),
     'Dîner — Transition': v('din-transition'),
-    // Soirée
+    'Soirée — Énergie': v('soiree-energie'),
+    'Soirée — Genre': v('soiree-genre'),
+    'Soirée — DJ/Musiciens': v('soiree-dj'),
     'Soirée — Profil public': v('soiree-pub'),
     'Soirée — Classiques/Nouveauté': document.getElementById('soiree-classiques') ? document.getElementById('soiree-classiques').value + '/100' : '',
     'Soirée — Musique actuelle': v('soiree-actu'),
     'Soirée — Musique actuelle détail': v('soiree-actu-detail'),
-    // Afterparty
     'Afterparty — Énergie': v('after-energie'),
     'Afterparty — Genre': v('after-genre'),
-    'Afterparty — DJ': v('after-dj'),
-    // Brunch
     'Brunch — Ambiance': v('brunch-ambiance'),
     'Brunch — Genre': v('brunch-genre'),
     'Notes étape 4': v('b2c-notes-4'),
-    // Invités
     'Public Enfants': v('b2c-public-enfants'),
     'Public Jeunes': v('b2c-public-jeunes'),
     'Public Adultes': v('b2c-public-adultes'),
