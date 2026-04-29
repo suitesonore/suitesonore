@@ -213,6 +213,16 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.4); }
     </div>
 
     <div class="field-group">
+  <label>VOTRE EMAIL</label>
+  <input type="email" name="email" id="customer-email" placeholder="ex. contact@suitesonore.com" required>
+</div>
+
+<div class="field-group">
+  <label>VOTRE NUMÉRO DE TÉLÉPHONE</label>
+  <input type="tel" name="telephone" id="customer-tel" placeholder="ex. 06 12 34 56 78">
+</div>
+    
+    <div class="field-group">
       <label>Type d'événement</label>
       <div class="radio-group">
         <button class="radio-chip" data-val="Mariage"      onclick="selectRadio(this,'b2c-type');updateWeddingVisibility()">Mariage</button>
