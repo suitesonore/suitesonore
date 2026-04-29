@@ -122,7 +122,14 @@ textarea {
   background: transparent; 
   border: none; 
   border-bottom: 1px solid var(--border); 
-  padding: .7rem 0 1.2rem 0; 
+  
+  /* On force une hauteur minimale plus grande et un padding bas important */
+  min-height: 3.5rem; 
+  padding: 0.5rem 0 1.5rem 0 !important; 
+  
+  line-height: 1.3; 
+  display: block;      /* Force le comportement en bloc */
+  
   font-family: 'Montserrat', sans-serif; 
   font-size: 1rem; 
   font-weight: 300; 
@@ -131,6 +138,13 @@ textarea {
   transition: border-color .3s; 
   -webkit-appearance: none; 
   border-radius: 0; 
+}
+
+/* On s'assure que le placeholder n'essaie pas de prendre toute la place */
+::placeholder {
+  font-size: 0.8rem;
+  line-height: 1.2;
+  vertical-align: top; /* Aligne le texte vers le haut pour laisser de la place en bas */
 }
 
 input:focus, textarea:focus { border-bottom-color: var(--forest); }
