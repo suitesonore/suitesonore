@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suite Sonore — Audit d'Identité Sonore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:  #f4f1ed;
+  --forest: #1b2d2a;
+  --sand:   #9e5a42;
+  --black:  #111111;
+  --muted:  #7a7167;
+  --border: rgba(27,45,42,0.14);
+  --faint:  rgba(27,45,42,0.06);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body { background: var(--cream); color: var(--black); font-family: 'Montserrat', sans-serif; font-weight: 300; line-height: 1.75; min-height: 100vh; overflow-x: hidden; }
+
+/* PROGRESS */
+#progress-bar-wrap { 
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  z-index: 1000; 
+  height: 2px; 
+  background: transparent; /* Supprime le filet gris visible au chargement */
+}
+#progress-bar { 
+  height: 100%; 
+  background: var(--forest); 
+  transition: width .6s cubic-bezier(.4,0,.2,1); 
+  width: 0%; 
+}
+
+/* HEADER */
+#site-header { 
+  position: fixed; 
+  top: 0; /* On colle le bandeau tout en haut */
+  left: 0; 
+  right: 0; 
+  z-index: 900; 
+  background: var(--cream); 
+  border-bottom: 1px solid var(--border); 
+  padding: 0 2.5rem; 
+  height: 64px; /* Ajusté pour compenser le top:0 */
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+}
+.logo-link { display: flex; align-items: center; cursor: pointer; border: none; background: none; padding: 0; }
+.logo-img { height: 28px; width: auto; display: block; margin-top: 2px; } /* Pour un centrage visuel parfait */
+.logo-fallback { font-family: 'Playfair Display', serif; font-size: 1rem; letter-spacing: .2em; text-transform: uppercase; color: var(--forest); }
+#step-label { font-size: .65rem; letter-spacing: .22em; text-transform: uppercase; color: var(--sand); font-weight: 400; }
+
+/* APP */
+#app { padding-top: 62px; }
+
+/* SCREENS */
+.screen { display: none; opacity: 0; transition: opacity .45s ease; }
+.screen.active  { display: block; }
+.screen.visible { opacity: 1; }
+#screen-success { display: none; flex-direction: column; align-items: center; justify-content: center; }
+#screen-success.active { display: flex; }
+
+/* HERO BANNER */
+.hero-banner {
+  position: relative;
+  width: 100%;
+  height: clamp(220px, 35vh, 420px);
+  background: var(--forest);
+  overflow: hidden;
+}
+.hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.52;
+  display: block;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 2rem 2.5rem;
+}
+.hero-eyebrow {
+  font-size: .62rem;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: rgba(244,241,237,0.6);
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.7rem, 4vw, 2.9rem);
+  font-weight: 400;
+  color: var(--cream);
+  line-height: 1.25;
+  margin-bottom: 1rem;
+}
+.hero-sub {
+  font-size: .72rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: rgba(244,241,237,0.65);
+  font-weight: 300;
+}
+
+/* STEP CONTAINER */
+.step-container { max-width: 740px; margin: 0 auto; padding: 4.5rem 2rem 8rem; animation: fadeUp .5s ease forwards; }
+.hero-banner + .step-container { padding-top: 3.5rem; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+.step-eyebrow { font-size: .65rem; letter-spacing: .3em; text-transform: uppercase; color: var(--sand); font-weight: 500; margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem; }
+.step-eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.step-title { font-family: 'Playfair Display', serif; font-size: clamp(1.55rem, 3vw, 2.2rem); font-weight: 500; color: var(--forest); margin-bottom: 1.5rem; line-height: 1.25; }
+
+/* INTRO */
+.section-intro { background: var(--faint); border-left: 2px solid var(--forest); padding: 1.25rem 1.5rem; margin-bottom: 3rem; font-size: .82rem; line-height: 1.9; color: var(--muted); font-weight: 300; }
+.section-intro p + p { margin-top: .5rem; }
+
+/* FIELDS */
+.field-group { margin-bottom: 2.25rem; }
+label { display: block; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--black); margin-bottom: .7rem; font-weight: 500; }
+label .opt { color: var(--muted); font-weight: 300; text-transform: none; letter-spacing: 0; font-size: .72rem; margin-left: .35rem; }
+input[type="text"], input[type="date"], input[type="number"], textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border); padding: .7rem 0; font-family: 'Montserrat', sans-serif; font-size: .88rem; font-weight: 300; color: var(--black); outline: none; transition: border-color .3s; -webkit-appearance: none; border-radius: 0; }
+input:focus, textarea:focus { border-bottom-color: var(--forest); }
+textarea { resize: none; min-height: 90px; line-height: 1.8; }
+
+/* CHIPS */
+.chip-group, .radio-group { display: flex; flex-wrap: wrap; gap: .55rem; }
+.chip, .radio-chip { padding: .45rem 1.05rem; border: 1px solid var(--border); background: transparent; font-family: 'Montserrat', sans-serif; font-size: .75rem; font-weight: 400; color: var(--black); cursor: pointer; transition: all .2s; letter-spacing: .02em; }
+.chip:hover, .radio-chip:hover { border-color: var(--forest); color: var(--forest); }
+.chip.selected, .radio-chip.selected { background: var(--forest); border-color: var(--forest); color: var(--cream); }
+
+/* SLIDER */
+.slider-wrap { padding: .5rem 0 .75rem; }
+.slider-labels { display: flex; justify-content: space-between; font-size: .7rem; color: var(--muted); font-weight: 400; margin-bottom: .75rem; }
+input[type="range"] { width: 100%; -webkit-appearance: none; height: 1px; background: var(--border); outline: none; border: none; padding: 0; cursor: pointer; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 13px; height: 13px; border-radius: 50%; background: var(--forest); cursor: pointer; transition: transform .2s; }
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.4); }
+
+/* NOTES */
+.notes-toggle { display: inline-flex; align-items: center; gap: .45rem; font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); cursor: pointer; margin-top: .75rem; border: none; background: none; transition: color .2s; font-family: 'Montserrat', sans-serif; font-weight: 500; }
+.notes-toggle:hover { color: var(--forest); }
+.notes-toggle .ti { font-size: .95rem; transition: transform .3s; }
+.notes-toggle.open .ti { transform: rotate(45deg); }
+.notes-area { overflow: hidden; max-height: 0; transition: max-height .4s ease; }
+.notes-area.open { max-height: 220px; }
+.notes-area textarea { margin-top: 1rem; border: 1px solid var(--border); padding: .85rem; font-size: .82rem; }
+
+/* CONDITIONAL */
+.conditional { overflow: hidden; max-height: 0; opacity: 0; transition: max-height .55s ease, opacity .4s ease; }
+.conditional.open { max-height: 1600px; opacity: 1; }
+
+/* TAG INPUT */
+.tags-input-wrap { display: flex; flex-wrap: wrap; gap: .45rem; border-bottom: 1px solid var(--border); padding: .5rem 0; align-items: center; min-height: 46px; cursor: text; transition: border-color .3s; }
+.tags-input-wrap:focus-within { border-bottom-color: var(--forest); }
+.tag-pill { display: inline-flex; align-items: center; gap: .35rem; padding: .18rem .65rem; background: var(--forest); color: var(--cream); font-size: .74rem; border-radius: 2px; font-family: 'Montserrat', sans-serif; font-weight: 400; }
+.tag-pill .rm { cursor: pointer; opacity: .7; }
+.tag-pill .rm:hover { opacity: 1; }
+.tags-input { border: none !important; padding: .18rem 0 !important; min-width: 140px; flex: 1; font-size: .84rem; }
+
+/* NAV */
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 3.5rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+.btn-back { font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: .45rem; font-family: 'Montserrat', sans-serif; font-weight: 400; transition: color .2s; }
+.btn-back:hover { color: var(--forest); }
+.btn-next { padding: .85rem 2.4rem; background: var(--forest); color: var(--cream); border: none; font-family: 'Montserrat', sans-serif; font-size: .7rem; letter-spacing: .22em; text-transform: uppercase; cursor: pointer; transition: background .3s; font-weight: 500; }
+.btn-next:hover { background: var(--sand); }
+
+/* HELPERS */
+.helper { font-size: .7rem; color: var(--muted); margin-top: .4rem; line-height: 1.6; font-weight: 300; }
+.divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+.sub-title { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--forest); font-weight: 400; margin-bottom: 1.25rem; }
+
+/* SUCCESS */
+#screen-success { min-height: calc(100vh - 62px); text-align: center; padding: 4rem 2rem; }
+#screen-success.visible { opacity: 1; }
+.success-icon { width: 52px; height: 52px; border: 1px solid var(--forest); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin: 0 auto 2.25rem; color: var(--forest); }
+.success-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 400; color: var(--forest); margin-bottom: 1.25rem; line-height: 1.3; }
+.success-sub { font-size: .88rem; color: var(--muted); max-width: 420px; line-height: 1.95; font-weight: 300; margin: 0 auto; }
+</style>
+</head>
+<body>
+
+<div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+
+<header id="site-header">
+  <button class="logo-link" onclick="goToStart()" title="Revenir au début">
+    <img src="logo-noir.png" alt="Suite Sonore" class="logo-img"
+         onerror="this.style.display='none';document.getElementById('logo-txt').style.display='block'">
+    <span class="logo-fallback" id="logo-txt" style="display:none">Suite Sonore</span>
+  </button>
+  <span id="step-label"></span>
+</header>
+
+<div id="app">
+
+<!-- ══════════════════ ÉTAPE 1 ══════════════════ -->
+<div class="screen" id="screen-b2b-1">
+
+  <!-- HERO BANNER — remplacez hero-pro.jpg par votre image -->
+  <div class="hero-banner">
+    <img src="hero-pro.jpg" alt="" class="hero-img" onerror="this.style.opacity='0'">
+    <div class="hero-overlay">
+      <p class="hero-eyebrow">Audit d'Identité Sonore</p>
+      <h1 class="hero-title">Ravi de commencer<br>cette collaboration.</h1>
+      <p class="hero-sub">Cet audit est la fondation de votre architecture sonore.</p>
+    </div>
+  </div>
+
+  <div class="step-container">
+    <p class="step-eyebrow" id="ey-b2b-1">Étape 1 sur 4 — Audit d'Identité Sonore</p>
+    <h2 class="step-title">Informations générales</h2>
+    <div class="section-intro">
+      <p>Prenez le temps de le remplir avec précision : chaque réponse influencera directement votre charte sonore.</p>
+      <p>Vos réponses sont strictement confidentielles et utilisées exclusivement dans le cadre de votre mission Suite Sonore.</p>
+      <p>Comptez environ 10 minutes.</p>
+    </div>
+
+    <div class="field-group">
+      <label>Nom de l'établissement</label>
+      <input type="text" id="b2b-nom" placeholder="ex. Hôtel du Marais">
+    </div>
+
+    <div class="field-group">
+      <label>Type d'établissement</label>
+      <div class="radio-group">
+        <button class="radio-chip" data-val="Hôtel"      onclick="selectRadio(this,'b2b-type');onTypeChange()">Hôtel</button>
+        <button class="radio-chip" data-val="Restaurant" onclick="selectRadio(this,'b2b-type');onTypeChange()">Restaurant</button>
+        <button class="radio-chip" data-val="Boutique"   onclick="selectRadio(this,'b2b-type');onTypeChange()">Boutique</button>
+        <button class="radio-chip" data-val="Spa"        onclick="selectRadio(this,'b2b-type');onTypeChange()">Spa</button>
+        <button class="radio-chip" data-val="Bar"        onclick="selectRadio(this,'b2b-type');onTypeChange()">Bar</button>
+        <button class="radio-chip" data-val="Autre"      onclick="selectRadio(this,'b2b-type');onTypeChange()">Autre</button>
+      </div>
+      <input type="hidden" id="b2b-type">
+    </div>
+
+    <div class="field-group">
+      <label>Adresse</label>
+      <input type="text" id="b2b-adresse" placeholder="Rue, ville, pays">
+    </div>
+
+    <div class="field-group">
+      <label>Votre établissement comporte-t-il plusieurs espaces distincts ?</label>
+      <div class="radio-group">
+        <button class="radio-chip" data-val="Non : un seul espace"     onclick="selectRadio(this,'b2b-espaces');openIfOui('b2b-espaces','cond-espaces')">Non : un seul espace</button>
+        <button class="radio-chip" data-val="Oui : 2 à 3 espaces"      onclick="selectRadio(this,'b2b-espaces');openIfOui('b2b-espaces','cond-espaces')">Oui : 2 à 3 espaces</button>
+        <button class="radio-chip" data-val="Oui : 4 espaces et plus"  onclick="selectRadio(this,'b2b-espaces');openIfOui('b2b-espaces','cond-espaces')">Oui : 4 espaces et plus</button>
+      </div>
+      <input type="hidden" id="b2b-espaces">
+      <div class="conditional" id="cond-espaces" style="margin-top:1rem;">
+        <label style="margin-bottom:.5rem;">Pouvez-vous préciser ces espaces et leur usage ?</label>
+        <textarea id="b2b-espaces-detail" placeholder="ex. Lobby d'accueil (passage), restaurant (déjeuner et dîner), bar rooftop (happy hour et soirée), spa (journée)…"></textarea>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Faites-vous partie d'un groupe avec plusieurs établissements ?</label>
+      <div class="radio-group">
+        <button class="radio-chip" data-val="Non : établissement indépendant"   onclick="selectRadio(this,'b2b-groupe');openIfOui('b2b-groupe','cond-groupe')">Non : établissement indépendant</button>
+        <button class="radio-chip" data-val="Oui : 2 établissements"            onclick="selectRadio(this,'b2b-groupe');openIfOui('b2b-groupe','cond-groupe')">Oui : 2 établissements</button>
+        <button class="radio-chip" data-val="Oui : 3 à 5 établissements"        onclick="selectRadio(this,'b2b-groupe');openIfOui('b2b-groupe','cond-groupe')">Oui : 3 à 5 établissements</button>
+        <button class="radio-chip" data-val="Oui : plus de 5 établissements"    onclick="selectRadio(this,'b2b-groupe');openIfOui('b2b-groupe','cond-groupe')">Oui : plus de 5 établissements</button>
+      </div>
+      <input type="hidden" id="b2b-groupe">
+      <div class="conditional" id="cond-groupe" style="margin-top:1rem;">
+        <label style="margin-bottom:.5rem;">Précisions sur votre groupe <span class="opt">optionnel</span></label>
+        <textarea id="b2b-groupe-detail" placeholder="Nom du groupe, localisation des établissements, type de lieux…"></textarea>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Quel est votre mode de diffusion musicale actuel ?</label>
+      <div class="radio-group">
+        <button class="radio-chip" data-val="Spotify / Apple Music / Deezer"                onclick="selectRadio(this,'b2b-diffusion')">Spotify / Apple / Deezer</button>
+        <button class="radio-chip" data-val="Plateforme professionnelle (Soundtrack, Mood…)" onclick="selectRadio(this,'b2b-diffusion')">Plateforme professionnelle</button>
+        <button class="radio-chip" data-val="Système audio intégré"                          onclick="selectRadio(this,'b2b-diffusion')">Système audio intégré</button>
+        <button class="radio-chip" data-val="Aucun pour le moment"                           onclick="selectRadio(this,'b2b-diffusion')">Aucun pour le moment</button>
+        <button class="radio-chip" data-val="Autre"                                          onclick="selectRadio(this,'b2b-diffusion')">Autre</button>
+      </div>
+      <input type="hidden" id="b2b-diffusion">
+      <input type="text" id="b2b-diffusion-detail" placeholder="Précisions sur votre mode de diffusion…" style="margin-top:.85rem;">
+    </div>
+
+    <button class="notes-toggle" onclick="toggleNotes(this)"><span class="ti">+</span> Notes et précisions</button>
+    <div class="notes-area"><textarea id="b2b-notes-1" placeholder="Informations complémentaires, contexte particulier…"></textarea></div>
+
+    <div class="nav-row">
+      <button class="btn-back" style="visibility:hidden">← Retour</button>
+      <button class="btn-next" onclick="nextStep()">Continuer →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ ÉTAPE 2 ══════════════════ -->
+<div class="screen" id="screen-b2b-2">
+<div class="step-container">
+  <p class="step-eyebrow" id="ey-b2b-2">Étape 2 sur 4 — Audit d'Identité Sonore</p>
+  <h2 class="step-title">Identité de marque</h2>
+  <div class="section-intro">
+    <p>Ces questions me permettent de comprendre l'ADN de votre établissement avant de concevoir votre charte sonore.</p>
+  </div>
+
+  <div class="field-group">
+    <label>Quels adjectifs décrivent le mieux votre établissement ? <span class="opt">jusqu'à 5 adjectifs</span></label>
+    <div class="tags-input-wrap" onclick="document.getElementById('b2b-adj-input').focus()">
+      <input type="text" class="tags-input" id="b2b-adj-input" placeholder="ex. Chaleureux, Élégant, Moderne, Discret, Audacieux… (Entrée pour valider)" maxlength="30">
+    </div>
+    <input type="hidden" id="b2b-adjectifs">
+    <p class="helper" id="b2b-adj-count">0 / 5 adjectifs renseignés</p>
+  </div>
+
+  <div class="field-group">
+    <label>Positionnement tarifaire</label>
+    <div class="radio-group">
+      <button class="radio-chip" data-val="Entrée de gamme" onclick="selectRadio(this,'b2b-prix')">Entrée de gamme</button>
+      <button class="radio-chip" data-val="Milieu de gamme" onclick="selectRadio(this,'b2b-prix')">Milieu de gamme</button>
+      <button class="radio-chip" data-val="Haut de gamme"   onclick="selectRadio(this,'b2b-prix')">Haut de gamme</button>
+      <button class="radio-chip" data-val="Luxe"            onclick="selectRadio(this,'b2b-prix')">Luxe</button>
+    </div>
+    <input type="hidden" id="b2b-prix">
+  </div>
+
+  <div class="field-group">
+    <label>Quel sentiment voulez-vous provoquer dès l'entrée de votre établissement ? <span class="opt">3 choix maximum</span></label>
+    <div class="chip-group">
+      <button class="chip" data-val="Sérénité"     onclick="toggleChip(this,'b2b-feeling',3)">Sérénité</button>
+      <button class="chip" data-val="Intimité"     onclick="toggleChip(this,'b2b-feeling',3)">Intimité</button>
+      <button class="chip" data-val="Convivialité" onclick="toggleChip(this,'b2b-feeling',3)">Convivialité</button>
+      <button class="chip" data-val="Élégance"     onclick="toggleChip(this,'b2b-feeling',3)">Élégance</button>
+      <button class="chip" data-val="Énergie"      onclick="toggleChip(this,'b2b-feeling',3)">Énergie</button>
+      <button class="chip" data-val="Curiosité"    onclick="toggleChip(this,'b2b-feeling',3)">Curiosité</button>
+      <button class="chip" data-val="Exclusivité"  onclick="toggleChip(this,'b2b-feeling',3)">Exclusivité</button>
+      <button class="chip" data-val="Dépaysement"  onclick="toggleChip(this,'b2b-feeling',3)">Dépaysement</button>
+    </div>
+    <input type="hidden" id="b2b-feeling">
+  </div>
+
+  <div class="field-group">
+    <label>Avez-vous une charte visuelle ou un univers de marque documenté ?</label>
+    <div class="radio-group">
+      <button class="radio-chip" data-val="Oui"                    onclick="selectRadio(this,'b2b-charte');onCharteChange()">Oui</button>
+      <button class="radio-chip" data-val="En cours d'élaboration" onclick="selectRadio(this,'b2b-charte');onCharteChange()">En cours d'élaboration</button>
+      <button class="radio-chip" data-val="Non"                    onclick="selectRadio(this,'b2b-charte');onCharteChange()">Non</button>
+    </div>
+    <input type="hidden" id="b2b-charte">
+    <div class="conditional" id="cond-charte" style="margin-top:1rem;">
+      <input type="text" id="b2b-charte-detail" placeholder="Lien vers vos assets, direction artistique, codes couleurs…">
+    </div>
+  </div>
+
+  <div class="field-group">
+    <label>Y a-t-il un établissement dont vous admirez l'ambiance sonore ? <span class="opt">optionnel</span></label>
+    <input type="text" id="b2b-reference" placeholder="Un hôtel, restaurant ou lieu qui vous inspire musicalement">
+  </div>
+
+  <button class="notes-toggle" onclick="toggleNotes(this)"><span class="ti">+</span> Notes et précisions</button>
+  <div class="notes-area"><textarea id="b2b-notes-2" placeholder="Précisions sur votre identité de marque, univers visuel, ton éditorial…"></textarea></div>
+
+  <div class="nav-row">
+    <button class="btn-back" onclick="goBack()">← Retour</button>
+    <button class="btn-next" onclick="nextStep()">Continuer →</button>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════ ÉTAPE 3 ══════════════════ -->
+<div class="screen" id="screen-b2b-3">
+<div class="step-container">
+  <p class="step-eyebrow" id="ey-b2b-3">Étape 3 sur 4 — Audit d'Identité Sonore</p>
+  <h2 class="step-title">Clientèle et programmation</h2>
+  <div class="section-intro">
+    <p>Comprendre votre clientèle me permet de calibrer précisément le niveau de sophistication et le registre émotionnel de votre identité sonore.</p>
+  </div>
+
+  <div class="field-group">
+    <label>Décrivez votre client type</label>
+    <input type="text" id="b2b-client" placeholder="ex. Cadres supérieurs en déplacement, couples, touristes internationaux…">
+  </div>
+
+  <div class="field-group">
+    <label>Quelles sont les tranches d'âge de votre clientèle ? <span class="opt">plusieurs choix possibles</span></label>
+    <div class="chip-group">
+      <button class="chip" data-val="– 25 ans"       onclick="toggleChip(this,'b2b-age',6)">– 25 ans</button>
+      <button class="chip" data-val="25–35 ans"       onclick="toggleChip(this,'b2b-age',6)">25–35 ans</button>
+      <button class="chip" data-val="35–50 ans"       onclick="toggleChip(this,'b2b-age',6)">35–50 ans</button>
+      <button class="chip" data-val="50–65 ans"       onclick="toggleChip(this,'b2b-age',6)">50–65 ans</button>
+      <button class="chip" data-val="65 ans et plus"  onclick="toggleChip(this,'b2b-age',6)">65 ans et plus</button>
+      <button class="chip" data-val="Très mixte"      onclick="toggleChip(this,'b2b-age',6)">Très mixte</button>
+    </div>
+    <input type="hidden" id="b2b-age">
+  </div>
+
+  <div class="field-group">
+    <label>Quelle est la provenance majoritaire de votre clientèle ?</label>
+    <div class="radio-group">
+      <button class="radio-chip" data-val="Locale"         onclick="selectRadio(this,'b2b-provenance')">Locale</button>
+      <button class="radio-chip" data-val="Nationale"      onclick="selectRadio(this,'b2b-provenance')">Nationale</button>
+      <button class="radio-chip" data-val="Internationale" onclick="selectRadio(this,'b2b-provenance')">Internationale</button>
+      <button class="radio-chip" data-val="Mixte"          onclick="selectRadio(this,'b2b-provenance')">Mixte</button>
+    </div>
+    <input type="hidden" id="b2b-provenance">
+    <input type="text" id="b2b-provenance-detail" placeholder="Précisions si nécessaire : origines géographiques, clientèle d'affaires, tourisme de niche…" style="margin-top:.85rem;">
+  </div>
+
+  <div class="field-group" id="field-duree-visite">
+    <label>Quelle est la durée moyenne de présence de votre clientèle dans l'établissement ?</label>
+    <div class="radio-group">
+      <button class="radio-chip" data-val="Moins d'1 heure"                onclick="selectRadio(this,'b2b-duree')">Moins d'1h</button>
+      <button class="radio-chip" data-val="1 à 2 heures"                   onclick="selectRadio(this,'b2b-duree')">1 à 2h</button>
+      <button class="radio-chip" data-val="2 à 3 heures"                   onclick="selectRadio(this,'b2b-duree')">2 à 3h</button>
+      <button class="radio-chip" data-val="Plus de 3 heures"               onclick="selectRadio(this,'b2b-duree')">Plus de 3h</button>
+      <button class="radio-chip" data-val="Variable selon le type de séjour" onclick="selectRadio(this,'b2b-duree')">Variable</button>
+    </div>
+    <input type="hidden" id="b2b-duree">
+  </div>
+
+  <div class="field-group">
+    <label>Souhaitez-vous une ambiance musicale unique ou évolutive selon les heures ?</label>
+    <div class="radio-group">
+      <button class="radio-chip" data-val="Unique : la même ambiance toute la journée"        onclick="selectRadio(this,'b2b-ambiance');openIfVal('b2b-ambiance','Évolutive','cond-ambiance')">Unique : la même ambiance toute la journée</button>
+      <button class="radio-chip" data-val="Évolutive : l'ambiance change selon les créneaux"  onclick="selectRadio(this,'b2b-ambiance');openIfVal('b2b-ambiance','Évolutive','cond-ambiance')">Évolutive : l'ambiance change selon les créneaux</button>
+    </div>
+    <input type="hidden" id="b2b-ambiance">
+    <div class="conditional" id="cond-ambiance" style="margin-top:1.25rem;">
+      <p class="helper" style="margin-bottom:1rem;">Décrivez l'ambiance souhaitée pour chaque créneau :</p>
+      <div class="field-group">
+        <label>Petit-déjeuner</label>
+        <input type="text" id="b2b-amb-pdj" placeholder="ex. Doux et calme, Jazz matinal, acoustique…">
+      </div>
+      <div class="field-group">
+        <label>Déjeuner</label>
+        <input type="text" id="b2b-amb-dej" placeholder="ex. Dynamique et léger, Bossa Nova, Soul…">
+      </div>
+      <div class="field-group">
+        <label>Happy Hour / Après-midi</label>
+        <input type="text" id="b2b-amb-happy" placeholder="ex. Énergique, House légère, Nu-Disco…">
+      </div>
+      <div class="field-group">
+        <label>Dîner / Soirée</label>
+        <input type="text" id="b2b-amb-diner" placeholder="ex. Élégant et feutré, Deep House, Jazz contemporain…">
+      </div>
+    </div>
+  </div>
+
+  <div class="field-group">
+    <label>Y a-t-il des espaces distincts avec des besoins sonores différents ?</label>
+    <div class="radio-group">
+      <button class="radio-chip" data-val="Non : un seul espace à programmer"                   onclick="selectRadio(this,'b2b-multiespace');openIfOui('b2b-multiespace','cond-multiespace')">Non : un seul espace</button>
+      <button class="radio-chip" data-val="Oui : plusieurs espaces aux ambiances différentes"   onclick="selectRadio(this,'b2b-multiespace');openIfOui('b2b-multiespace','cond-multiespace')">Oui : plusieurs espaces</button>
+    </div>
+    <input type="hidden" id="b2b-multiespace">
+    <div class="conditional" id="cond-multiespace" style="margin-top:1rem;">
+      <label style="margin-bottom:.5rem;">Listez les espaces et l'ambiance souhaitée pour chacun</label>
+      <textarea id="b2b-multiespace-detail" placeholder="ex. Bar : Énergique et festif / Restaurant : Feutré et élégant / Lobby : Neutre et accueillant…"></textarea>
+    </div>
+  </div>
+
+  <div class="field-group">
+    <label>Comment envisagez-vous le volume sonore dans votre établissement ?</label>
+    <p class="helper" style="margin-bottom:.75rem;">Le volume peut varier selon les espaces et les créneaux. Décrivez votre vision globale.</p>
+    <div class="radio-group">
+      <button class="radio-chip" data-val="Très discret : fond sonore quasi imperceptible"    onclick="selectRadio(this,'b2b-volume')">Très discret</button>
+      <button class="radio-chip" data-val="Discret : présent mais sans s'imposer"             onclick="selectRadio(this,'b2b-volume')">Discret</button>
+      <button class="radio-chip" data-val="Présent : on l'entend clairement"                  onclick="selectRadio(this,'b2b-volume')">Présent</button>
+      <button class="radio-chip" data-val="Affirmé : la musique fait partie de l'expérience"  onclick="selectRadio(this,'b2b-volume')">Affirmé</button>
+    </div>
+    <input type="hidden" id="b2b-volume">
+    <input type="text" id="b2b-volume-detail" placeholder="Précisions si nécessaire : variations selon les espaces, les créneaux horaires…" style="margin-top:.85rem;">
+  </div>
+
+  <div class="field-group">
+    <label>Y a-t-il des contraintes sonores particulières ? <span class="opt">optionnel</span></label>
+    <input type="text" id="b2b-contraintes" placeholder="ex. Réglementation locale, voisinage sensible, horaires de diffusion limités…">
+  </div>
+
+  <button class="notes-toggle" onclick="toggleNotes(this)"><span class="ti">+</span> Notes et précisions</button>
+  <div class="notes-area"><textarea id="b2b-notes-3" placeholder="Contexte sur votre clientèle, saisonnalité, événements récurrents…"></textarea></div>
+
+  <div class="nav-row">
+    <button class="btn-back" onclick="goBack()">← Retour</button>
+    <button class="btn-next" onclick="nextStep()">Continuer →</button>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════ ÉTAPE 4 ══════════════════ -->
+<div class="screen" id="screen-b2b-4">
+<div class="step-container">
+  <p class="step-eyebrow" id="ey-b2b-4">Étape 4 sur 4 — Audit d'Identité Sonore</p>
+  <h2 class="step-title">Gestion et finalisation</h2>
+  <div class="section-intro">
+    <p>Ces questions me permettent de comprendre comment votre équipe interagira avec votre matériel de diffusion sonore au quotidien.</p>
+  </div>
+
+  <div class="field-group">
+    <label>Quel niveau d'autonomie souhaitez-vous accorder à vos équipes sur la musique ?</label>
+    <div class="radio-group">
+      <button class="radio-chip" data-val="Liberté totale : l'équipe peut modifier les playlists" onclick="selectRadio(this,'b2b-autonomie')">Liberté totale</button>
+      <button class="radio-chip" data-val="Partielle : réglage du volume uniquement"              onclick="selectRadio(this,'b2b-autonomie')">Volume uniquement</button>
+      <button class="radio-chip" data-val="Verrouillé : aucune modification possible"             onclick="selectRadio(this,'b2b-autonomie')">Verrouillé</button>
+    </div>
+    <input type="hidden" id="b2b-autonomie">
+  </div>
+
+  <div class="field-group">
+    <label>Combien de personnes seront amenées à gérer le système au quotidien ?</label>
+    <div class="radio-group">
+      <button class="radio-chip" data-val="1 personne"          onclick="selectRadio(this,'b2b-nb-gest')">1 personne</button>
+      <button class="radio-chip" data-val="2 à 3 personnes"     onclick="selectRadio(this,'b2b-nb-gest')">2 à 3 personnes</button>
+      <button class="radio-chip" data-val="4 personnes et plus" onclick="selectRadio(this,'b2b-nb-gest')">4 personnes et plus</button>
+    </div>
+    <input type="hidden" id="b2b-nb-gest">
+  </div>
+
+  <div class="field-group">
+    <label>Quel est le niveau de compétence technique de vos équipes sur l'outil de diffusion musicale ?</label>
+    <p class="helper" style="margin-bottom:.75rem;">Maîtrise de l'outil de diffusion, gestion des playlists, réglages audio.</p>
+    <div class="radio-group">
+      <button class="radio-chip" data-val="Débutant : besoin d'un guide simple et clair"          onclick="selectRadio(this,'b2b-niveau-tech')">Débutant</button>
+      <button class="radio-chip" data-val="Intermédiaire : à l'aise avec les outils numériques"   onclick="selectRadio(this,'b2b-niveau-tech')">Intermédiaire</button>
+      <button class="radio-chip" data-val="Avancé : autonome sur les systèmes audio"              onclick="selectRadio(this,'b2b-niveau-tech')">Avancé</button>
+    </div>
+    <input type="hidden" id="b2b-niveau-tech">
+  </div>
+
+  <div class="field-group">
+    <label>Avez-vous déjà une playlist ou une référence musicale existante ? <span class="opt">optionnel</span></label>
+    <input type="text" id="b2b-playlist" placeholder="Un lien Spotify, Deezer ou YouTube qui reflète l'ambiance actuelle de votre établissement…">
+  </div>
+
+  <div class="field-group">
+    <label>Genres, artistes ou morceaux de référence <span class="opt">optionnel</span></label>
+    <textarea id="b2b-artistes" placeholder="Les genres, artistes ou titres qui incarnent l'identité sonore que vous recherchez…"></textarea>
+  </div>
+
+  <div class="field-group">
+    <label>Genres, artistes ou morceaux à bannir absolument <span class="opt">optionnel</span></label>
+    <textarea id="b2b-blacklist" placeholder="Genres musicaux, artistes ou titres que vous ne souhaitez jamais entendre dans votre établissement…"></textarea>
+  </div>
+
+  <div class="field-group">
+    <label>Une dernière précision pour que je comprenne parfaitement l'ADN de votre établissement ? <span class="opt">optionnel</span></label>
+    <textarea id="b2b-adn-final" placeholder="Tout ce qui n'a pas encore été abordé et qui pourrait m'aider à mieux cerner votre univers…"></textarea>
+  </div>
+
+  <!-- Formspree : display:none masque l'élément HTML mais le formulaire reste
+       entièrement fonctionnel — les données sont envoyées via fetch() en JS. -->
+  <form id="b2b-form" action="https://formspree.io/f/VOTRE_ID_PRO" method="POST" style="display:none;">
+    <input type="hidden" name="parcours" value="B2B — Audit d'Identité Sonore">
+    <input type="hidden" name="_subject" value="Nouvel onboarding Suite Sonore — Établissement">
+  </form>
+
+  <div class="nav-row">
+    <button class="btn-back" onclick="goBack()">← Retour</button>
+    <button class="btn-next" onclick="submitB2B()">Envoyer ✓</button>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════ SUCCESS ══════════════════ -->
+<div class="screen" id="screen-success">
+  <div class="success-icon">✓</div>
+  <h2 class="success-title">Merci pour votre confiance.</h2>
+  <p class="success-sub">Vos réponses sont entre les mains de Suite Sonore. Nous les étudions avec soin et reviendrons vers vous dans les prochains jours.</p>
+  <p style="margin-top:3rem;font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);font-weight:500;">Suite Sonore — Architecture Sonore</p>
+</div>
+
+</div><!-- /app -->
+
+<script>
+// ─── STATE ──────────────────────────────────────────────────
+let currentScreen = 'b2b-1';
+const flow = ['b2b-1','b2b-2','b2b-3','b2b-4','success'];
+
+// ─── NAVIGATION ─────────────────────────────────────────────
+function showScreen(name) {
+  const cur = document.getElementById('screen-' + currentScreen);
+  const nxt = document.getElementById('screen-' + name);
+  if (!nxt) return;
+  if (cur) { cur.classList.remove('visible'); setTimeout(() => cur.classList.remove('active'), 350); }
+  currentScreen = name;
+  updateProgress();
+  updateHeader();
+  setTimeout(() => {
+    nxt.classList.add('active');
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      nxt.classList.add('visible');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }));
+  }, 350);
+}
+
+function goToStart() { showScreen('b2b-1'); }
+function nextStep()  { const i = flow.indexOf(currentScreen); if (i < flow.length - 1) showScreen(flow[i + 1]); }
+function goBack()    { const i = flow.indexOf(currentScreen); if (i > 0) showScreen(flow[i - 1]); }
+
+function updateProgress() {
+  const i = flow.indexOf(currentScreen);
+  document.getElementById('progress-bar').style.width = (i <= 0 ? 0 : i / (flow.length - 1) * 100) + '%';
+}
+
+function updateHeader() {
+  const lbl = document.getElementById('step-label');
+  if (currentScreen === 'success') { lbl.textContent = ''; return; }
+  const steps = flow.filter(s => s !== 'success');
+  lbl.textContent = 'Étape ' + (steps.indexOf(currentScreen) + 1) + ' / ' + steps.length;
+}
+
+// ─── FIELD LOGIC ────────────────────────────────────────────
+function onTypeChange() {
+  const f = document.getElementById('field-duree-visite');
+  if (f) f.style.display = document.getElementById('b2b-type').value === 'Hôtel' ? 'none' : '';
+}
+function onCharteChange() {
+  const v = document.getElementById('b2b-charte').value;
+  document.getElementById('cond-charte').classList.toggle('open', v === 'Oui' || v === "En cours d'élaboration");
+}
+
+// ─── CHIPS ──────────────────────────────────────────────────
+function selectRadio(btn, fieldId) {
+  btn.parentElement.querySelectorAll('.radio-chip').forEach(c => c.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById(fieldId).value = btn.dataset.val;
+}
+function toggleChip(btn, fieldId, max) {
+  const grp = btn.parentElement;
+  if (!btn.classList.contains('selected') && grp.querySelectorAll('.chip.selected').length >= max) return;
+  btn.classList.toggle('selected');
+  document.getElementById(fieldId).value = Array.from(grp.querySelectorAll('.chip.selected')).map(c => c.dataset.val).join(', ');
+}
+
+// ─── CONDITIONALS ───────────────────────────────────────────
+function openIfOui(fieldId, condId) {
+  document.getElementById(condId).classList.toggle('open', document.getElementById(fieldId).value.startsWith('Oui'));
+}
+function openIfVal(fieldId, keyword, condId) {
+  document.getElementById(condId).classList.toggle('open', document.getElementById(fieldId).value.includes(keyword));
+}
+
+// ─── NOTES ──────────────────────────────────────────────────
+function toggleNotes(btn) {
+  btn.classList.toggle('open');
+  btn.nextElementSibling.classList.toggle('open');
+}
+
+// ─── TAG INPUT ──────────────────────────────────────────────
+function initTagInput(inputId, hiddenId, countId, max, unit) {
+  const input = document.getElementById(inputId);
+  const wrap  = input.parentElement;
+  const tags  = []; wrap._tags = tags;
+  input.addEventListener('keydown', e => {
+    if ((e.key === 'Enter' || e.key === ',') && input.value.trim()) {
+      e.preventDefault();
+      if (max && tags.length >= max) return;
+      const val = input.value.trim().replace(/,$/, '');
+      if (val && !tags.includes(val)) {
+        tags.push(val);
+        const sv = val.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+        const pill = document.createElement('span');
+        pill.className = 'tag-pill'; pill.dataset.tag = val;
+        pill.innerHTML = val + ' <span class="rm" onclick="removeTag(this,\'' + sv + '\',\'' + hiddenId + '\',\'' + countId + '\',' + max + ',\'' + unit + '\')">×</span>';
+        wrap.insertBefore(pill, input);
+        input.value = '';
+        document.getElementById(hiddenId).value = tags.join(', ');
+        const cnt = document.getElementById(countId);
+        if (cnt) cnt.textContent = tags.length + (max ? ' / ' + max : '') + ' ' + unit;
+      }
+    }
+    if (e.key === 'Backspace' && !input.value && tags.length) {
+      const last = tags.pop();
+      const pill = wrap.querySelector('[data-tag="' + last + '"]');
+      if (pill) wrap.removeChild(pill);
+      document.getElementById(hiddenId).value = tags.join(', ');
+      const cnt = document.getElementById(countId);
+      if (cnt) cnt.textContent = tags.length + (max ? ' / ' + max : '') + ' ' + unit;
+    }
+  });
+}
+function removeTag(rm, val, hiddenId, countId, max, unit) {
+  const wrap = rm.closest('.tags-input-wrap'), tags = wrap._tags;
+  const idx = tags.indexOf(val); if (idx > -1) tags.splice(idx, 1);
+  const pill = rm.closest('.tag-pill'); if (pill) wrap.removeChild(pill);
+  document.getElementById(hiddenId).value = tags.join(', ');
+  const cnt = document.getElementById(countId);
+  if (cnt) cnt.textContent = tags.length + (max ? ' / ' + max : '') + ' ' + unit;
+}
+
+// ─── PREFILL VIA URL ────────────────────────────────────────
+// Usage: pro.html?nom=H%C3%B4tel+Le+Marais&type=H%C3%B4tel&adresse=Paris
+function prefillFromURL() {
+  const p = new URLSearchParams(window.location.search);
+  [['nom','b2b-nom'],['adresse','b2b-adresse']].forEach(([param, id]) => {
+    const val = p.get(param), el = document.getElementById(id);
+    if (val && el) el.value = decodeURIComponent(val);
+  });
+  const type = p.get('type');
+  if (type) {
+    const decoded = decodeURIComponent(type);
+    document.querySelectorAll('#screen-b2b-1 .radio-chip').forEach(btn => {
+      if (btn.dataset.val === decoded) { btn.classList.add('selected'); document.getElementById('b2b-type').value = decoded; onTypeChange(); }
+    });
+  }
+}
+
+// ─── COLLECT & SUBMIT ───────────────────────────────────────
+function v(id) { const el = document.getElementById(id); return el ? el.value : ''; }
+
+async function submitB2B() {
+  const data = {
+    'Nom': v('b2b-nom'), 'Type': v('b2b-type'), 'Adresse': v('b2b-adresse'),
+    'Espaces': v('b2b-espaces'), 'Détail espaces': v('b2b-espaces-detail'),
+    'Groupe': v('b2b-groupe'), 'Détail groupe': v('b2b-groupe-detail'),
+    'Mode de diffusion': v('b2b-diffusion'), 'Précisions diffusion': v('b2b-diffusion-detail'),
+    'Notes étape 1': v('b2b-notes-1'),
+    'Adjectifs': v('b2b-adjectifs'), 'Prix': v('b2b-prix'),
+    'Sentiment entrée': v('b2b-feeling'), 'Charte': v('b2b-charte'),
+    'Détail charte': v('b2b-charte-detail'), 'Référence': v('b2b-reference'),
+    'Notes étape 2': v('b2b-notes-2'),
+    'Client type': v('b2b-client'), 'Âges': v('b2b-age'),
+    'Provenance': v('b2b-provenance'), 'Précisions provenance': v('b2b-provenance-detail'),
+    'Durée visite': v('b2b-duree'), 'Ambiance': v('b2b-ambiance'),
+    'Ambiance PDJ': v('b2b-amb-pdj'), 'Ambiance Déjeuner': v('b2b-amb-dej'),
+    'Ambiance Happy Hour': v('b2b-amb-happy'), 'Ambiance Dîner': v('b2b-amb-diner'),
+    'Multi-espaces': v('b2b-multiespace'), 'Détail multi-espaces': v('b2b-multiespace-detail'),
+    'Volume': v('b2b-volume'), 'Précisions volume': v('b2b-volume-detail'),
+    'Contraintes': v('b2b-contraintes'), 'Notes étape 3': v('b2b-notes-3'),
+    'Autonomie': v('b2b-autonomie'), 'Nb gestionnaires': v('b2b-nb-gest'),
+    'Niveau technique': v('b2b-niveau-tech'), 'Playlist existante': v('b2b-playlist'),
+    'Genres & artistes référence': v('b2b-artistes'), 'Blacklist': v('b2b-blacklist'),
+    'ADN final': v('b2b-adn-final'),
+  };
+  const form = document.getElementById('b2b-form');
+  form.querySelectorAll('.df').forEach(f => f.remove());
+  for (const [k, val] of Object.entries(data)) {
+    if (!val) continue;
+    const inp = document.createElement('input');
+    inp.type = 'hidden'; inp.name = k; inp.value = val; inp.className = 'df';
+    form.appendChild(inp);
+  }
+  try {
+    const res = await fetch(form.action, { method: 'POST', headers: { 'Accept': 'application/json' }, body: new FormData(form) });
+    if (res.ok) showScreen('success');
+    else alert('Une erreur est survenue. Veuillez réessayer.');
+  } catch { alert('Une erreur est survenue. Veuillez réessayer.'); }
+}
+
+// ─── INIT ───────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const first = document.getElementById('screen-b2b-1');
+  first.classList.add('active');
+  requestAnimationFrame(() => requestAnimationFrame(() => first.classList.add('visible')));
+  initTagInput('b2b-adj-input', 'b2b-adjectifs', 'b2b-adj-count', 5, 'adjectifs renseignés');
+  prefillFromURL();
+  updateHeader();
+  updateProgress();
+});
+</script>
+</body>
+</html>
