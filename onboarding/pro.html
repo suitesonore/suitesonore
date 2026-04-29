@@ -255,20 +255,6 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.4); }
     </div>
 
     <div class="field-group">
-      <label>Votre établissement comporte-t-il plusieurs espaces distincts ?</label>
-      <div class="radio-group">
-        <button class="radio-chip" data-val="Non : un seul espace"     onclick="selectRadio(this,'b2b-espaces');openIfOui('b2b-espaces','cond-espaces')">Non : un seul espace</button>
-        <button class="radio-chip" data-val="Oui : 2 à 3 espaces"      onclick="selectRadio(this,'b2b-espaces');openIfOui('b2b-espaces','cond-espaces')">Oui : 2 à 3 espaces</button>
-        <button class="radio-chip" data-val="Oui : 4 espaces et plus"  onclick="selectRadio(this,'b2b-espaces');openIfOui('b2b-espaces','cond-espaces')">Oui : 4 espaces et plus</button>
-      </div>
-      <input type="hidden" id="b2b-espaces">
-      <div class="conditional" id="cond-espaces" style="margin-top:1rem;">
-        <label style="margin-bottom:.5rem;">Pouvez-vous préciser ces espaces et leur usage ?</label>
-        <textarea id="b2b-espaces-detail" placeholder="ex. Lobby d'accueil (passage), restaurant (déjeuner et dîner), bar rooftop (happy hour et soirée), spa (journée)…"></textarea>
-      </div>
-    </div>
-
-    <div class="field-group">
       <label>Faites-vous partie d'un groupe avec plusieurs établissements ?</label>
       <div class="radio-group">
         <button class="radio-chip" data-val="Non : établissement indépendant"   onclick="selectRadio(this,'b2b-groupe');openIfOui('b2b-groupe','cond-groupe')">Non : établissement indépendant</button>
