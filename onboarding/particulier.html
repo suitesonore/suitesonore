@@ -22,44 +22,18 @@ html { font-size: 16px; scroll-behavior: smooth; }
 body { background: var(--cream); color: var(--black); font-family: 'Montserrat', sans-serif; font-weight: 300; line-height: 1.75; min-height: 100vh; overflow-x: hidden; }
 
 /* PROGRESS */
-#progress-bar-wrap { 
-  position: fixed; 
-  top: 0; 
-  left: 0; 
-  right: 0; 
-  z-index: 1000; 
-  height: 2px; 
-  background: transparent;
-}
-#progress-bar { 
-  height: 100%; 
-  background: var(--forest); 
-  transition: width .6s cubic-bezier(.4,0,.2,1); 
-  width: 0%; 
-}
+#progress-bar-wrap { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 2px; background: transparent; }
+#progress-bar { height: 100%; background: var(--forest); transition: width .6s cubic-bezier(.4,0,.2,1); width: 0%; }
 
 /* HEADER */
-#site-header { 
-  position: fixed; 
-  top: 0;
-  left: 0; 
-  right: 0; 
-  z-index: 900; 
-  background: var(--cream); 
-  border-bottom: 1px solid var(--border); 
-  padding: 0 2.5rem; 
-  height: 64px;
-  display: flex; 
-  align-items: center; 
-  justify-content: space-between; 
-}
+#site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 900; background: var(--cream); border-bottom: 1px solid var(--border); padding: 0 2.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between; }
 .logo-link { display: flex; align-items: center; cursor: pointer; border: none; background: none; padding: 0; }
 .logo-img { height: 28px; width: auto; display: block; margin-top: 2px; }
 .logo-fallback { font-family: 'Playfair Display', serif; font-size: 1rem; letter-spacing: .2em; text-transform: uppercase; color: var(--forest); }
 #step-label { font-size: .65rem; letter-spacing: .22em; text-transform: uppercase; color: var(--sand); font-weight: 400; }
 
 /* APP */
-#app { padding-top: 62px; }
+#app { padding-top: 64px; }
 
 /* SCREENS */
 .screen { display: none; opacity: 0; transition: opacity .45s ease; }
@@ -91,74 +65,17 @@ body { background: var(--cream); color: var(--black); font-family: 'Montserrat',
 
 /* FIELDS */
 .field-group { margin-bottom: 2.25rem; }
+label { display: block; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--black); margin-bottom: .7rem; font-weight: 500; }
+label .opt { color: var(--muted); font-weight: 300; text-transform: none; letter-spacing: 0; font-size: .72rem; margin-left: .35rem; }
 
-label { 
-  display: block; 
-  font-size: .72rem; 
-  letter-spacing: .16em; 
-  text-transform: uppercase; 
-  color: var(--black); 
-  margin-bottom: .7rem; 
-  font-weight: 500; 
+input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="number"], textarea {
+  width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border);
+  padding: .75rem 0; font-family: 'Montserrat', sans-serif; font-size: .95rem; font-weight: 300;
+  color: var(--black); outline: none; transition: border-color .3s; -webkit-appearance: none; border-radius: 0;
 }
-
-label .opt { 
-  color: var(--muted); 
-  font-weight: 300; 
-  text-transform: none; 
-  letter-spacing: 0; 
-  font-size: .72rem; 
-  margin-left: .35rem; 
-}
-
-/* Style des champs de saisie */
-input[type="text"], 
-input[type="email"], 
-input[type="tel"], 
-input[type="date"], 
-input[type="number"], 
-textarea { 
-  width: 100%; 
-  background: transparent; 
-  border: none; 
-  border-bottom: 1px solid var(--border); 
-  
-  /* On force une hauteur minimale plus grande et un padding bas important */
-  min-height: 3.5rem; 
-  padding: 0.5rem 0 1.5rem 0 !important; 
-  
-  line-height: 1.3; 
-  display: block;      /* Force le comportement en bloc */
-  
-  font-family: 'Montserrat', sans-serif; 
-  font-size: 1rem; 
-  font-weight: 300; 
-  color: var(--black); 
-  outline: none; 
-  transition: border-color .3s; 
-  -webkit-appearance: none; 
-  border-radius: 0; 
-}
-
-/* On s'assure que le placeholder n'essaie pas de prendre toute la place */
-::placeholder {
-  font-size: 0.8rem;
-  line-height: 1.2;
-  vertical-align: top; /* Aligne le texte vers le haut pour laisser de la place en bas */
-}
-
 input:focus, textarea:focus { border-bottom-color: var(--forest); }
-
 textarea { resize: none; min-height: 90px; line-height: 1.8; }
-
-/* Style des placeholders : Élégance et lisibilité sur mobile */
-::placeholder {
-  font-size: 0.8rem;
-  color: var(--muted);
-  opacity: 0.6;
-  white-space: normal; /* Autorise le texte à aller à la ligne au lieu d'être coupé */
-  line-height: 1.3;
-}
+::placeholder { color: var(--muted); opacity: 0.55; font-size: .85rem; }
 
 /* CHIPS */
 .chip-group, .radio-group { display: flex; flex-wrap: wrap; gap: .55rem; }
@@ -176,12 +93,12 @@ textarea { resize: none; min-height: 90px; line-height: 1.8; }
 .moment-block-title { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--forest); font-weight: 400; margin-bottom: 1.5rem; display: flex; align-items: center; gap: .75rem; }
 .moment-block-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-/* SLIDER */
-.slider-wrap { padding: .5rem 0 .75rem; }
-.slider-labels { display: flex; justify-content: space-between; font-size: .7rem; color: var(--muted); font-weight: 400; margin-bottom: .75rem; }
-input[type="range"] { width: 100%; -webkit-appearance: none; height: 1px; background: var(--border); outline: none; border: none; padding: 0; cursor: pointer; }
-input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 13px; height: 13px; border-radius: 50%; background: var(--forest); cursor: pointer; transition: transform .2s; }
-input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.4); }
+/* ARTIST FIELDS */
+.artist-grid { display: flex; flex-direction: column; gap: 0; }
+.artist-row { display: flex; align-items: center; gap: 1rem; border-bottom: 1px solid var(--border); transition: border-color .3s; }
+.artist-row:focus-within { border-bottom-color: var(--forest); }
+.artist-num { font-size: .68rem; color: var(--muted); font-weight: 500; min-width: 20px; letter-spacing: .05em; }
+.artist-input { border: none !important; padding: .75rem 0 !important; flex: 1; font-size: .88rem; background: transparent; font-family: 'Montserrat', sans-serif; font-weight: 300; color: var(--black); outline: none; }
 
 /* NOTES */
 .notes-toggle { display: inline-flex; align-items: center; gap: .45rem; font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); cursor: pointer; margin-top: .75rem; border: none; background: none; transition: color .2s; font-family: 'Montserrat', sans-serif; font-weight: 500; }
@@ -196,7 +113,7 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.4); }
 .conditional { overflow: hidden; max-height: 0; opacity: 0; transition: max-height .55s ease, opacity .4s ease; }
 .conditional.open { max-height: 1600px; opacity: 1; }
 
-/* TAG INPUT */
+/* TAG INPUT (conservé pour chansons) */
 .tags-input-wrap { display: flex; flex-wrap: wrap; gap: .45rem; border-bottom: 1px solid var(--border); padding: .5rem 0; align-items: center; min-height: 46px; cursor: text; transition: border-color .3s; }
 .tags-input-wrap:focus-within { border-bottom-color: var(--forest); }
 .tag-pill { display: inline-flex; align-items: center; gap: .35rem; padding: .18rem .65rem; background: var(--forest); color: var(--cream); font-size: .74rem; border-radius: 2px; font-family: 'Montserrat', sans-serif; font-weight: 400; }
@@ -226,35 +143,11 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.4); }
 .divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
 
 /* SUCCESS */
-#screen-success { min-height: calc(100vh - 62px); text-align: center; padding: 4rem 2rem; }
+#screen-success { min-height: calc(100vh - 64px); text-align: center; padding: 4rem 2rem; }
 #screen-success.visible { opacity: 1; }
 .success-icon { width: 52px; height: 52px; border: 1px solid var(--forest); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin: 0 auto 2.25rem; color: var(--forest); }
 .success-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 400; color: var(--forest); margin-bottom: 1.25rem; line-height: 1.3; }
 .success-sub { font-size: .88rem; color: var(--muted); max-width: 420px; line-height: 1.95; font-weight: 300; margin: 0 auto; }
-input[type="text"], input[type="email"], input[type="tel"] {
-  width: 100%;
-  padding: .8rem 0;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--border);
-  color: var(--black);
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1rem;
-  font-weight: 300;
-  outline: none;
-  border-radius: 0;
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-input::placeholder {
-  color: var(--muted);
-  opacity: 0.6;
-}
-
-input:focus {
-  border-bottom-color: var(--forest);
-}
 </style>
 </head>
 <body>
@@ -299,15 +192,15 @@ input:focus {
     </div>
 
     <div class="field-group">
-      <label>VOTRE EMAIL</label>
-      <input type="email" name="email" id="customer-email" placeholder="ex. contact@suitesonore.com" required>
+      <label>Votre email</label>
+      <input type="email" id="customer-email" placeholder="ex. contact@suitesonore.com">
     </div>
 
     <div class="field-group">
-      <label>VOTRE NUMÉRO DE TÉLÉPHONE</label>
-      <input type="tel" name="telephone" id="customer-tel" placeholder="ex. 06 12 34 56 78">
+      <label>Votre numéro de téléphone</label>
+      <input type="tel" id="customer-tel" placeholder="ex. 06 12 34 56 78">
     </div>
-    
+
     <div class="field-group">
       <label>Type d'événement</label>
       <div class="radio-group">
@@ -328,9 +221,9 @@ input:focus {
     <div class="field-group">
       <label>Le lieu</label>
       <div class="radio-group">
-        <button class="radio-chip" data-val="Lieu déjà réservé"          onclick="selectRadio(this,'b2c-lieu-statut');openIfVal('b2c-lieu-statut','déjà réservé','cond-lieu')">Lieu déjà réservé</button>
-        <button class="radio-chip" data-val="Lieu en cours de recherche"  onclick="selectRadio(this,'b2c-lieu-statut');openIfVal('b2c-lieu-statut','déjà réservé','cond-lieu')">Lieu en cours de recherche</button>
-        <button class="radio-chip" data-val="Lieu à définir"              onclick="selectRadio(this,'b2c-lieu-statut');openIfVal('b2c-lieu-statut','déjà réservé','cond-lieu')">Lieu à définir</button>
+        <button class="radio-chip" data-val="Lieu déjà réservé"         onclick="selectRadio(this,'b2c-lieu-statut');openIfVal('b2c-lieu-statut','déjà réservé','cond-lieu')">Lieu déjà réservé</button>
+        <button class="radio-chip" data-val="Lieu en cours de recherche" onclick="selectRadio(this,'b2c-lieu-statut');openIfVal('b2c-lieu-statut','déjà réservé','cond-lieu')">Lieu en cours de recherche</button>
+        <button class="radio-chip" data-val="Lieu à définir"             onclick="selectRadio(this,'b2c-lieu-statut');openIfVal('b2c-lieu-statut','déjà réservé','cond-lieu')">Lieu à définir</button>
       </div>
       <input type="hidden" id="b2c-lieu-statut">
       <div class="conditional" id="cond-lieu" style="margin-top:.85rem;">
@@ -343,16 +236,17 @@ input:focus {
       <input type="number" id="b2c-invites" placeholder="ex. 80" min="1">
     </div>
 
+    <!-- Mode de diffusion : multi-select -->
     <div class="field-group">
-      <label>Mode de diffusion prévu</label>
-      <div class="radio-group">
-        <button class="radio-chip" data-val="Enceintes autonomes"            onclick="selectRadio(this,'b2c-diffusion')">Enceintes autonomes</button>
-        <button class="radio-chip" data-val="Système audio du lieu"          onclick="selectRadio(this,'b2c-diffusion')">Système du lieu</button>
-        <button class="radio-chip" data-val="Matériel appartenant au client" onclick="selectRadio(this,'b2c-diffusion')">Matériel client</button>
-        <button class="radio-chip" data-val="À définir ensemble"             onclick="selectRadio(this,'b2c-diffusion')">À définir</button>
+      <label>Mode(s) de diffusion prévu(s) <span class="opt">plusieurs choix possibles</span></label>
+      <div class="chip-group">
+        <button class="chip" data-val="Enceintes autonomes"            onclick="toggleChip(this,'b2c-diffusion',5)">Enceintes autonomes</button>
+        <button class="chip" data-val="Système audio du lieu"          onclick="toggleChip(this,'b2c-diffusion',5)">Système du lieu</button>
+        <button class="chip" data-val="Matériel appartenant au client" onclick="toggleChip(this,'b2c-diffusion',5)">Matériel client</button>
+        <button class="chip" data-val="À définir ensemble"             onclick="toggleChip(this,'b2c-diffusion',5)">À définir</button>
       </div>
       <input type="hidden" id="b2c-diffusion">
-      <input type="text" id="b2c-diffusion-detail" placeholder="Précisions si nécessaire…" style="margin-top:.85rem;">
+      <input type="text" id="b2c-diffusion-detail" placeholder="Précisions si nécessaire — par exemple, système différent pour le cocktail et la soirée…" style="margin-top:.85rem;">
     </div>
 
     <div class="nav-row">
@@ -368,16 +262,13 @@ input:focus {
   <p class="step-eyebrow" id="ey-b2c-2">Étape 2 sur 4 — L'Atelier Sonore</p>
   <h2 class="step-title">Identité musicale</h2>
   <div class="section-intro">
-    <p>C'est ici que tout commence vraiment. Ces références musicales sont le matériau brut de notre travail commun — partagez-les sans filtre, même si elles vous semblent évidentes.</p>
+    <p>C'est ici que tout commence vraiment. Ces références musicales sont le matériau brut de notre travail commun. Partagez-les sans filtre, même si elles vous semblent évidentes.</p>
   </div>
 
   <div class="field-group">
-    <label>Listez vos 5 à 10 artistes ou morceaux piliers</label>
-    <div class="tags-input-wrap" onclick="document.getElementById('b2c-art-input').focus()">
-      <input type="text" class="tags-input" id="b2c-art-input" placeholder="Artiste ou titre, puis Entrée pour valider" maxlength="60">
-    </div>
-    <input type="hidden" id="b2c-artistes-ref">
-    <p class="helper" id="b2c-art-count">0 artiste(s) renseigné(s)</p>
+    <label>Listez vos artistes ou morceaux piliers <span class="opt">jusqu'à 10</span></label>
+    <p class="helper" style="margin-bottom:.85rem;">Pensez à ce qui correspond le mieux à votre événement. Cette liste me permet de mieux cerner vos artistes et morceaux incontournables et votre univers musical. Pensez bien qu'un artiste que vous adorez peut ne pas convenir à l'ambiance que vous cherchez.</p>
+    <textarea id="b2c-artistes-ref" rows="5" placeholder="ex. Van Morrison, Amy Winehouse, Frank Ocean, Norah Jones, The Weeknd…"></textarea>
   </div>
 
   <div class="field-group">
@@ -425,28 +316,30 @@ input:focus {
     <input type="text" id="b2c-emotion" placeholder="ex. Légèreté et insouciance, Élégance feutrée, Nostalgie joyeuse…">
   </div>
 
-  <div class="field-group">
+  <!-- Atmosphère globale : masquée si mariage (gérée séquence par séquence en étape 4) -->
+  <div class="field-group" id="field-atmosphere">
     <label>Atmosphère globale de l'événement</label>
-    <div class="slider-wrap">
-      <div class="slider-labels"><span>Intime et feutré</span><span>Festif et vibrant</span></div>
-      <input type="range" id="b2c-intimite" min="0" max="100" value="50">
-    </div>
+    <input type="text" id="b2c-atmosphere" placeholder="ex. Intime et feutré, Élégant et posé, Détendu et convivial, Festif et vibrant, Électrique et intense…">
   </div>
 
   <div class="field-group">
     <label>Dans le choix musical, qui doit primer ?</label>
-    <div class="slider-wrap">
-      <div class="slider-labels"><span>Vos goûts</span><span>Les goûts de vos invités</span></div>
-      <input type="range" id="b2c-gouts" min="0" max="100" value="50">
+    <div class="radio-group">
+      <button class="radio-chip" data-val="Nos goûts uniquement"                      onclick="selectRadio(this,'b2c-gouts')">Nos goûts uniquement</button>
+      <button class="radio-chip" data-val="Un mélange de nos goûts et ceux des invités" onclick="selectRadio(this,'b2c-gouts')">Un mélange des deux</button>
+      <button class="radio-chip" data-val="Les goûts de tout le monde avant tout"    onclick="selectRadio(this,'b2c-gouts')">Les goûts de tout le monde</button>
     </div>
+    <input type="hidden" id="b2c-gouts">
   </div>
 
   <div class="field-group">
     <label>Rapport entre titres connus et belles découvertes</label>
-    <div class="slider-wrap">
-      <div class="slider-labels"><span>Titres familiers</span><span>Belles découvertes</span></div>
-      <input type="range" id="b2c-decouv" min="0" max="100" value="50">
+    <div class="radio-group">
+      <button class="radio-chip" data-val="Principalement des titres connus et fédérateurs"         onclick="selectRadio(this,'b2c-decouv')">Titres connus avant tout</button>
+      <button class="radio-chip" data-val="Un équilibre entre familier et découvertes"               onclick="selectRadio(this,'b2c-decouv')">Un équilibre des deux</button>
+      <button class="radio-chip" data-val="Volontiers des découvertes — on fait confiance à votre sélection" onclick="selectRadio(this,'b2c-decouv')">On aime les découvertes</button>
     </div>
+    <input type="hidden" id="b2c-decouv">
   </div>
 
   <div class="field-group">
@@ -470,24 +363,24 @@ input:focus {
   <p class="step-eyebrow" id="ey-b2c-4">Étape 4 sur 5 — L'Atelier Sonore</p>
   <h2 class="step-title">L'orchestration de votre journée</h2>
   <div class="section-intro">
-    <p>Sélectionnez les moments compris dans votre formule. Les questions correspondantes apparaîtront automatiquement — uniquement pour les séquences qui vous concernent.</p>
+    <p>Sélectionnez les séquences incluses dans votre formule Suite Sonore. Les questions correspondantes s'afficheront automatiquement pour chaque moment choisi.</p>
+    <p>Si vous n'avez pas encore finalisé votre formule, cochez tous les moments envisagés.</p>
   </div>
 
   <div class="field-group">
     <label>Quels moments souhaitez-vous confier à Suite Sonore ? <span class="opt">plusieurs choix possibles</span></label>
     <div class="chip-group" style="gap:.65rem;">
-      <button class="moment-chip" data-val="Welcome Dinner"     onclick="toggleMoment(this)">Welcome Dinner</button>
-      <button class="moment-chip" data-val="Cérémonie"          onclick="toggleMoment(this)">Cérémonie</button>
-      <button class="moment-chip" data-val="Cocktail"           onclick="toggleMoment(this)">Cocktail</button>
-      <button class="moment-chip" data-val="Dîner"              onclick="toggleMoment(this)">Dîner</button>
-      <button class="moment-chip" data-val="Soirée"             onclick="toggleMoment(this)">Soirée</button>
-      <button class="moment-chip" data-val="Afterparty"         onclick="toggleMoment(this)">Afterparty</button>
+      <button class="moment-chip" data-val="Welcome Dinner"      onclick="toggleMoment(this)">Welcome Dinner</button>
+      <button class="moment-chip" data-val="Cérémonie"           onclick="toggleMoment(this)">Cérémonie</button>
+      <button class="moment-chip" data-val="Cocktail"            onclick="toggleMoment(this)">Cocktail</button>
+      <button class="moment-chip" data-val="Dîner"               onclick="toggleMoment(this)">Dîner</button>
+      <button class="moment-chip" data-val="Soirée"              onclick="toggleMoment(this)">Soirée</button>
+      <button class="moment-chip" data-val="Afterparty"          onclick="toggleMoment(this)">Afterparty</button>
       <button class="moment-chip" data-val="Brunch du lendemain" onclick="toggleMoment(this)">Brunch du lendemain</button>
     </div>
-    <p class="helper" style="margin-top:.75rem;">Si vous n'avez pas encore finalisé votre formule, sélectionnez tous les moments envisagés.</p>
   </div>
 
-  <!-- ── WELCOME DINNER ── -->
+  <!-- WELCOME DINNER -->
   <div class="conditional" id="moment-welcome">
     <div class="moment-block">
       <p class="moment-block-title">Welcome Dinner</p>
@@ -498,9 +391,9 @@ input:focus {
       <div class="field-group">
         <label>Niveau d'énergie</label>
         <div class="radio-group">
-          <button class="radio-chip" data-val="Intime et feutré : fond sonore discret" onclick="selectRadio(this,'wd-energie')">Intime et feutré</button>
+          <button class="radio-chip" data-val="Intime et feutré : fond sonore discret"                        onclick="selectRadio(this,'wd-energie')">Intime et feutré</button>
           <button class="radio-chip" data-val="Détendu et convivial : on commence à se mettre dans l'ambiance" onclick="selectRadio(this,'wd-energie')">Détendu et convivial</button>
-          <button class="radio-chip" data-val="Festif : on célèbre déjà !" onclick="selectRadio(this,'wd-energie')">Festif</button>
+          <button class="radio-chip" data-val="Festif : on célèbre déjà !"                                    onclick="selectRadio(this,'wd-energie')">Festif</button>
         </div>
         <input type="hidden" id="wd-energie">
       </div>
@@ -511,7 +404,7 @@ input:focus {
     </div>
   </div>
 
-  <!-- ── CÉRÉMONIE ── -->
+  <!-- CÉRÉMONIE -->
   <div class="conditional" id="moment-ceremonie">
     <div class="moment-block">
       <p class="moment-block-title">Cérémonie</p>
@@ -538,7 +431,7 @@ input:focus {
     </div>
   </div>
 
-  <!-- ── COCKTAIL ── -->
+  <!-- COCKTAIL -->
   <div class="conditional" id="moment-cocktail">
     <div class="moment-block">
       <p class="moment-block-title">Cocktail</p>
@@ -557,7 +450,7 @@ input:focus {
     </div>
   </div>
 
-  <!-- ── DÎNER ── -->
+  <!-- DÎNER -->
   <div class="conditional" id="moment-diner">
     <div class="moment-block">
       <p class="moment-block-title">Dîner</p>
@@ -572,8 +465,7 @@ input:focus {
     </div>
   </div>
 
-  <!-- ── SOIRÉE ── -->
-  <!-- MODIFICATION 3 : ajout de 3 nouvelles questions dans la section Soirée -->
+  <!-- SOIRÉE -->
   <div class="conditional" id="moment-soiree">
     <div class="moment-block">
       <p class="moment-block-title">Soirée</p>
@@ -602,18 +494,20 @@ input:focus {
       <div class="field-group">
         <label>Profil de vos invités en soirée</label>
         <div class="radio-group">
-          <button class="radio-chip" data-val="Danseur : tout le monde sur la piste"         onclick="selectRadio(this,'soiree-pub')">Danseur</button>
-          <button class="radio-chip" data-val="Mixte : danseurs et observateurs cohabitent"  onclick="selectRadio(this,'soiree-pub')">Mixte</button>
-          <button class="radio-chip" data-val="Observateur : ambiance plutôt lounge"         onclick="selectRadio(this,'soiree-pub')">Observateur</button>
+          <button class="radio-chip" data-val="Danseur : tout le monde sur la piste"        onclick="selectRadio(this,'soiree-pub')">Danseur</button>
+          <button class="radio-chip" data-val="Mixte : danseurs et observateurs cohabitent" onclick="selectRadio(this,'soiree-pub')">Mixte</button>
+          <button class="radio-chip" data-val="Observateur : ambiance plutôt lounge"        onclick="selectRadio(this,'soiree-pub')">Observateur</button>
         </div>
         <input type="hidden" id="soiree-pub">
       </div>
       <div class="field-group">
         <label>Pour la soirée, vous voulez des grands classiques ou de la nouveauté ?</label>
-        <div class="slider-wrap">
-          <div class="slider-labels"><span>On reste sur des classiques</span><span>On veut de la musique actuelle</span></div>
-          <input type="range" id="soiree-classiques" min="0" max="100" value="50">
+        <div class="radio-group">
+          <button class="radio-chip" data-val="On reste sur des classiques indémodables"       onclick="selectRadio(this,'soiree-classiques')">Classiques avant tout</button>
+          <button class="radio-chip" data-val="Un mélange de classiques et de titres récents" onclick="selectRadio(this,'soiree-classiques')">Un mélange des deux</button>
+          <button class="radio-chip" data-val="On veut de la musique actuelle"                onclick="selectRadio(this,'soiree-classiques')">Musique actuelle</button>
         </div>
+        <input type="hidden" id="soiree-classiques">
       </div>
       <div class="field-group">
         <label>Tolérance aux musiques très actuelles (pop, électro, rap…)</label>
@@ -629,8 +523,7 @@ input:focus {
     </div>
   </div>
 
-  <!-- ── AFTERPARTY ── -->
-  <!-- MODIFICATION 3 : question DJ retirée de l'Afterparty, déplacée dans Soirée -->
+  <!-- AFTERPARTY -->
   <div class="conditional" id="moment-afterparty">
     <div class="moment-block">
       <p class="moment-block-title">Afterparty</p>
@@ -650,16 +543,16 @@ input:focus {
     </div>
   </div>
 
-  <!-- ── BRUNCH ── -->
+  <!-- BRUNCH -->
   <div class="conditional" id="moment-brunch">
     <div class="moment-block">
       <p class="moment-block-title">Brunch du lendemain</p>
       <div class="field-group">
         <label>Quelle ambiance pour ce moment de retrouvailles ?</label>
         <div class="radio-group">
-          <button class="radio-chip" data-val="Douce et détendue : on se repose, fond sonore léger"  onclick="selectRadio(this,'brunch-ambiance')">Douce et détendue</button>
+          <button class="radio-chip" data-val="Douce et détendue : on se repose, fond sonore léger"   onclick="selectRadio(this,'brunch-ambiance')">Douce et détendue</button>
           <button class="radio-chip" data-val="Joyeuse et ensoleillée : on repart sur une bonne note" onclick="selectRadio(this,'brunch-ambiance')">Joyeuse et ensoleillée</button>
-          <button class="radio-chip" data-val="Festive : on continue encore un peu !"               onclick="selectRadio(this,'brunch-ambiance')">Festive</button>
+          <button class="radio-chip" data-val="Festive : on continue encore un peu !"                onclick="selectRadio(this,'brunch-ambiance')">Festive</button>
         </div>
         <input type="hidden" id="brunch-ambiance">
       </div>
@@ -760,6 +653,13 @@ input:focus {
     <p class="helper">Celles qui doivent être jouées, quoi qu'il arrive.</p>
   </div>
 
+  <!-- Lien playlist -->
+  <div class="field-group">
+    <label>Un lien vers une playlist de référence ? <span class="opt">optionnel</span></label>
+    <input type="text" id="b2c-playlist" placeholder="Lien Spotify, Deezer, YouTube…">
+    <p class="helper" style="margin-top:.5rem;">Une playlist que vous avez construite, ou une que vous écoutez au quotidien et qui reflète votre univers musical. Si vous partagez une playlist personnelle, pensez à la rendre publique pour que je puisse y accéder.</p>
+  </div>
+
   <button class="notes-toggle" onclick="toggleNotes(this)"><span class="ti">+</span> Notes et précisions</button>
   <div class="notes-area"><textarea id="b2c-notes-5" placeholder="Tout ce que nous n'avons pas encore abordé et qui pourrait nourrir notre travail…"></textarea></div>
 
@@ -794,10 +694,7 @@ const flowWedding = ['b2c-1','b2c-2','b2c-3','b2c-4','b2c-5','success'];
 function getFlow() { return isWedding ? flowWedding : flowBase; }
 
 // ─── NAVIGATION ─────────────────────────────────────────────
-// MODIFICATION 1 : scroll to top forcé sur mobile lors du passage étape 1 → étape 2
-function isMobile() {
-  return window.innerWidth <= 768;
-}
+function isMobile() { return window.innerWidth <= 768; }
 
 function showScreen(name) {
   const cur = document.getElementById('screen-' + currentScreen);
@@ -812,14 +709,10 @@ function showScreen(name) {
     nxt.classList.add('active');
     requestAnimationFrame(() => requestAnimationFrame(() => {
       nxt.classList.add('visible');
-      // Sur mobile : scroll forcé immédiat + second scroll après rendu pour couvrir tous les cas
       if (isMobile()) {
         document.documentElement.scrollTop = 0;
         document.body.scrollTop = 0;
-        setTimeout(() => {
-          document.documentElement.scrollTop = 0;
-          document.body.scrollTop = 0;
-        }, 50);
+        setTimeout(() => { document.documentElement.scrollTop = 0; document.body.scrollTop = 0; }, 50);
       } else {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
@@ -855,11 +748,14 @@ function updateEyebrows() {
 // ─── WEDDING ────────────────────────────────────────────────
 function updateWeddingVisibility() {
   isWedding = document.getElementById('b2c-type').value === 'Mariage';
+  // Masquer "atmosphère globale" pour les mariages (gérée séquence par séquence en étape 4)
+  const atm = document.getElementById('field-atmosphere');
+  if (atm) atm.style.display = isWedding ? 'none' : '';
   updateEyebrows();
   updateHeader();
 }
 
-// ─── MOMENT TOGGLE (étape 4) ────────────────────────────────
+// ─── MOMENT TOGGLE ──────────────────────────────────────────
 const MOMENT_MAP = {
   'Welcome Dinner':      'moment-welcome',
   'Cérémonie':           'moment-ceremonie',
@@ -898,8 +794,8 @@ function openIfVal(fieldId, keyword, condId) {
   document.getElementById(condId).classList.toggle('open', document.getElementById(fieldId).value.includes(keyword));
 }
 function openIfYesOuAVoir(fieldId, condId) {
-  const v = document.getElementById(fieldId).value;
-  document.getElementById(condId).classList.toggle('open', v === 'Oui' || v === 'À voir selon le budget');
+  const val = document.getElementById(fieldId).value;
+  document.getElementById(condId).classList.toggle('open', val === 'Oui' || val === 'À voir selon le budget');
 }
 
 // ─── NOTES ──────────────────────────────────────────────────
@@ -908,7 +804,7 @@ function toggleNotes(btn) {
   btn.nextElementSibling.classList.toggle('open');
 }
 
-// ─── TAG INPUT ──────────────────────────────────────────────
+// ─── TAG INPUT (chansons absolues) ──────────────────────────
 function initTagInput(inputId, hiddenId, countId, max, unit) {
   const input = document.getElementById(inputId);
   const wrap  = input.parentElement;
@@ -970,34 +866,39 @@ function prefillFromURL() {
   }
 }
 
-// ─── COLLECT ────────────────────────────────────────────────
-function v(id) { const el = document.getElementById(id); return el ? el.value : ''; }
-function r(id) {
-  const el = document.getElementById(id);
-  return el ? el.value + '/100' : '';
+// ─── COLLECT ARTISTES ───────────────────────────────────────
+function collectArtistes() {
+  const el = document.getElementById('b2c-artistes-ref');
+  return el ? el.value.trim() : '';
 }
 
-// ─── SUBMIT ─────────────────────────────────────────────────
+// ─── COLLECT & SUBMIT ───────────────────────────────────────
+function v(id) { const el = document.getElementById(id); return el ? el.value : ''; }
+
 async function submitB2C() {
   const selectedMoments = Array.from(document.querySelectorAll('.moment-chip.selected')).map(b => b.dataset.val).join(', ');
 
   const data = {
-    'Nom': v('b2c-nom'), 'Type': v('b2c-type'), 'Date': v('b2c-date'),
+    'Nom': v('b2c-nom'),
+    'Email': v('customer-email'),
+    'Téléphone': v('customer-tel'),
+    'Type': v('b2c-type'), 'Date': v('b2c-date'),
     'Lieu statut': v('b2c-lieu-statut'), 'Lieu': v('b2c-lieu'),
     'Invités': v('b2c-invites'),
     'Diffusion': v('b2c-diffusion'), 'Précisions diffusion': v('b2c-diffusion-detail'),
-    'Artistes piliers': v('b2c-artistes-ref'), 'Époques': v('b2c-epoques'),
+    'Artistes / morceaux pour cet événement': collectArtistes(),
+    'Époques': v('b2c-epoques'),
     'Styles': v('b2c-styles'), 'Blacklist': v('b2c-blacklist'),
     'Notes étape 2': v('b2c-notes-2'),
     'Émotion invités': v('b2c-emotion'),
-    'Curseur Intime/Festif': r('b2c-intimite'),
-    'Curseur Vos goûts/Invités': r('b2c-gouts'),
-    'Curseur Connus/Découvertes': r('b2c-decouv'),
+    'Atmosphère globale': v('b2c-atmosphere'),
+    'Choix musical — qui prime': v('b2c-gouts'),
+    'Connus vs Découvertes': v('b2c-decouv'),
     'Bascule': v('b2c-bascule'), 'Notes étape 3': v('b2c-notes-3'),
     'Moments sélectionnés': selectedMoments,
     'Welcome Dinner — Ambiance': v('wd-ambiance'),
     'Welcome Dinner — Énergie': v('wd-energie'),
-    'Welcome Dinner — Genres/artistes': v('wd-genres'),
+    'Welcome Dinner — Genres': v('wd-genres'),
     'Cérémonie — Émotion': v('cere-emotion'),
     'Cérémonie — Durée': v('cere-duree'),
     'Cérémonie — Live': v('cere-live'),
@@ -1010,7 +911,7 @@ async function submitB2C() {
     'Soirée — Genre': v('soiree-genre'),
     'Soirée — DJ/Musiciens': v('soiree-dj'),
     'Soirée — Profil public': v('soiree-pub'),
-    'Soirée — Classiques/Nouveauté': document.getElementById('soiree-classiques') ? document.getElementById('soiree-classiques').value + '/100' : '',
+    'Soirée — Classiques/Nouveauté': v('soiree-classiques'),
     'Soirée — Musique actuelle': v('soiree-actu'),
     'Soirée — Musique actuelle détail': v('soiree-actu-detail'),
     'Afterparty — Énergie': v('after-energie'),
@@ -1025,6 +926,7 @@ async function submitB2C() {
     'Public Seniors': v('b2c-public-seniors'),
     'Tradition': v('b2c-trad'),
     'Chansons absolues': v('b2c-chansons'),
+    'Playlist de référence': v('b2c-playlist'),
     'Notes étape finale': v('b2c-notes-5'),
   };
 
@@ -1049,8 +951,7 @@ document.addEventListener('DOMContentLoaded', () => {
   first.classList.add('active');
   requestAnimationFrame(() => requestAnimationFrame(() => first.classList.add('visible')));
 
-  initTagInput('b2c-art-input',      'b2c-artistes-ref', 'b2c-art-count', 10, 'artiste(s) renseigné(s)');
-  initTagInput('b2c-chansons-input', 'b2c-chansons',     null,             0,  'chanson(s) renseignée(s)');
+  initTagInput('b2c-chansons-input', 'b2c-chansons', null, 0, 'chanson(s) renseignée(s)');
 
   prefillFromURL();
   updateEyebrows();
